@@ -2,7 +2,6 @@
 
 namespace Mpociot\VatCalculator;
 
-use Illuminate\Contracts\Config\Repository;
 use Mpociot\VatCalculator\Exceptions\VATCheckUnavailableException;
 use SoapClient;
 use SoapFault;
@@ -351,11 +350,6 @@ class VatCalculator
     protected $postalCode;
 
     /**
-     * @var Repository
-     */
-    protected $config;
-
-    /**
      * @var float
      */
     protected $taxValue = 0;
@@ -386,23 +380,6 @@ class VatCalculator
      * @var bool
      */
     protected $forwardSoapFaults = false;
-
-    /**
-     * @param \Illuminate\Contracts\Config\Repository
-     */
-    public function __construct($config = null)
-    {
-        $this->config = $config;
-
-        $businessCountryKey = 'vat_calculator.business_country_code';
-        if (isset($this->config) && $this->config->has($businessCountryKey)) {
-            $this->setBusinessCountryCode($this->config->get($businessCountryKey, ''));
-        }
-
-        if (isset($this->config) && $this->config->get('vat_calculator.forward_soap_faults', false)) {
-            $this->forwardSoapFaults();
-        }
-    }
 
     /**
      * Finds the client IP address.
