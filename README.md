@@ -12,8 +12,10 @@ Handle all the hard stuff related to EU MOSS tax/vat regulations, the way it sho
 
 ```php
 // Easy to use!
+use Mpociot\VatCalculator\VatCalculator;
+
 $vatCalculator = new VatCalculator();
-$countryCode = $vatCalculator->getIPBasedCountry();
+$countryCode = $vatCalculator->getIpBasedCountry();
 $vatCalculator->calculate( 24.00, $countryCode );
 $vatCalculator->calculate( 24.00, $countryCode, $postalCode );
 $vatCalculator->calculate( 71.00, 'DE', '41352', $isCompany = true );
@@ -55,7 +57,7 @@ use Mpociot\VatCalculator\VatCalculator;
 
 $vatCalculator = new VatCalculator();
 $vatCalculator->setBusinessCountryCode('DE');
-$countryCode = $vatCalculator->getIPBasedCountry();
+$countryCode = $vatCalculator->getIpBasedCountry();
 $grossPrice = $vatCalculator->calculate( 49.99, 'LU' );
 ```
 
@@ -149,7 +151,7 @@ Right now you'll need to show your users a way to select their country - probabl
 This package has a small helper function, that tries to lookup the Country of the user, based on the IP they have.
 
 ```php
-$countryCode = $vatCalculator->getIPBasedCountry();
+$countryCode = $vatCalculator->getIpBasedCountry();
 ```
 
 The `$countryCode` will either be `false`, if the service is unavailable, or the country couldn't be looked up. Otherwise the variable contains the two-letter country code, which can be used to prefill the user selection.

@@ -386,7 +386,7 @@ class VatCalculator
      *
      * @return mixed
      */
-    private function getClientIP()
+    private function getClientIp()
     {
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
             $clientIpAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -406,9 +406,9 @@ class VatCalculator
      *
      * @return bool|string
      */
-    public function getIPBasedCountry()
+    public function getIpBasedCountry()
     {
-        $ip = $this->getClientIP();
+        $ip = $this->getClientIp();
         $url = self::GEOCODE_SERVICE_URL.$ip;
         $result = file_get_contents($url);
         switch ($result[0]) {

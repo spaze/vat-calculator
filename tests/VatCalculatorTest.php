@@ -551,7 +551,7 @@ class VatCalculatorTest extends PHPUnit
     {
         self::$file_get_contents_result = '1;DE;DEU;Deutschland';
         $vatCalculator = new VatCalculator();
-        $country = $vatCalculator->getIPBasedCountry();
+        $country = $vatCalculator->getIpBasedCountry();
         $this->assertEquals('DE', $country);
     }
 
@@ -559,7 +559,7 @@ class VatCalculatorTest extends PHPUnit
     {
         self::$file_get_contents_result = '0';
         $vatCalculator = new VatCalculator();
-        $country = $vatCalculator->getIPBasedCountry();
+        $country = $vatCalculator->getIpBasedCountry();
         $this->assertFalse($country);
     }
 
@@ -568,7 +568,7 @@ class VatCalculatorTest extends PHPUnit
         self::$file_get_contents_result = false;
         $_SERVER['REMOTE_ADDR'] = '';
         $vatCalculator = new VatCalculator();
-        $country = $vatCalculator->getIPBasedCountry();
+        $country = $vatCalculator->getIpBasedCountry();
         $this->assertFalse($country);
     }
 
