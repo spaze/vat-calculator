@@ -644,7 +644,7 @@ class VatCalculator
      */
     public function isValidVatNumber($vatNumber)
     {
-        $details = self::getVatDetails($vatNumber);
+        $details = $this->getVatDetails($vatNumber);
 
         if ($details) {
             return $details->valid;

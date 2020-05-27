@@ -12,13 +12,14 @@ Handle all the hard stuff related to EU MOSS tax/vat regulations, the way it sho
 
 ```php
 // Easy to use!
-$countryCode = VatCalculator::getIPBasedCountry();
-VatCalculator::calculate( 24.00, $countryCode );
-VatCalculator::calculate( 24.00, $countryCode, $postalCode );
-VatCalculator::calculate( 71.00, 'DE', '41352', $isCompany = true );
-VatCalculator::getTaxRateForLocation( 'NL' );
+$vatCalculator = new VatCalculator();
+$countryCode = $vatCalculator->getIPBasedCountry();
+$vatCalculator->calculate( 24.00, $countryCode );
+$vatCalculator->calculate( 24.00, $countryCode, $postalCode );
+$vatCalculator->calculate( 71.00, 'DE', '41352', $isCompany = true );
+$vatCalculator->getTaxRateForLocation( 'NL' );
 // Check validity of a VAT number
-VatCalculator::isValidVatNumber('NL123456789B01');
+$vatCalculator->isValidVatNumber('NL123456789B01');
 ```
 ## Contents
 
@@ -46,7 +47,6 @@ $ composer require mpociot/vat-calculator
 ### Standalone
 
 This package is designed for standalone usage. Simply create a new instance of the VAT calculator and use it.
-All documentation examples use the Laravel 5 facade code, so make sure not to call the methods as if they were static methods.
 
 Example:
 
@@ -66,7 +66,7 @@ $grossPrice = $vatCalculator->calculate( 49.99, 'LU' );
 To calculate the gross price use the `calculate` method with a net price and a country code as paremeters.
 
 ```php
-$grossPrice = VatCalculator::calculate( 24.00, 'DE' );
+$grossPrice = $vatCalculator->calculate( 24.00, 'DE' );
 ```
 The third parameter is the postal code of the customer.
 
@@ -74,17 +74,17 @@ As a fourth parameter, you can pass in a boolean indicating whether the customer
 
 
 ```php
-$grossPrice = VatCalculator::calculate( 24.00, 'DE', '12345', $isCompany = true );
+$grossPrice = $vatCalculator->calculate( 24.00, 'DE', '12345', $isCompany = true );
 ```
 <a name="receive-more-information"></a>
 ### Receive more information
 After calculating the gross price you can extract more information from the VatCalculator.
 
 ```php
-$grossPrice = VatCalculator::calculate( 24.00, 'DE' ); // 28.56
-$taxRate    = VatCalculator::getTaxRate(); // 0.19
-$netPrice   = VatCalculator::getNetPrice(); // 24.00
-$taxValue   = VatCalculator::getTaxValue(); // 4.56
+$grossPrice = $vatCalculator->calculate( 24.00, 'DE' ); // 28.56
+$taxRate    = $vatCalculator->getTaxRate(); // 0.19
+$netPrice   = $vatCalculator->getNetPrice(); // 24.00
+$taxValue   = $vatCalculator->getTaxValue(); // 4.56
 ```
 
 <a name="validate-eu-vat-numbers"></a>
@@ -94,7 +94,7 @@ Prior to validating your customers VAT numbers, you can use the `shouldCollectVa
 in the first place.
 
 ```php
-if (VatCalculator::shouldCollectVat('DE')) {
+if ($vatCalculator->shouldCollectVat('DE')) {
 
 }
 ```
@@ -107,7 +107,7 @@ This service relies on a third party SOAP API provided by the EU. If, for whatev
 
 ```php
 try {
-	$validVat = VatCalculator::isValidVatNumber('NL 123456789 B01');
+	$validVat = $vatCalculator->isValidVatNumber('NL 123456789 B01');
 } catch( VatCheckUnavailableException $e ){
 	// Please handle me
 }
@@ -124,7 +124,7 @@ This service relies on a third party SOAP API provided by the EU. If, for whatev
 
 ```php
 try {
-	$vat_details = VatCalculator::getVatDetails('NL 123456789 B01');
+	$vat_details = $vatCalculator->getVatDetails('NL 123456789 B01');
 	print_r($vat_details);
 	/* Outputs
 	stdClass Object
@@ -149,7 +149,7 @@ Right now you'll need to show your users a way to select their country - probabl
 This package has a small helper function, that tries to lookup the Country of the user, based on the IP they have.
 
 ```php
-$countryCode = VatCalculator::getIPBasedCountry();
+$countryCode = $vatCalculator->getIPBasedCountry();
 ```
 
 The `$countryCode` will either be `false`, if the service is unavailable, or the country couldn't be looked up. Otherwise the variable contains the two-letter country code, which can be used to prefill the user selection.
