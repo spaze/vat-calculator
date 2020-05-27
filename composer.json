@@ -23,8 +23,8 @@
         "phpunit/phpunit": "4.7.*"
     },
     "autoload": {
-        "psr-0": {
-            "Spaze\\VatCalculator": "src/"
+        "psr-4": {
+            "Spaze\\VatCalculator\\": "src/"
         }
     },
     "minimum-stability": "stable",
