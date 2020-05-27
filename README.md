@@ -8,11 +8,11 @@ VatCalculator
 [![StyleCI](https://styleci.io/repos/41703624/shield)](https://styleci.io/repos/41703624)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/adecb98a-8484-48cb-be13-803decc475bc/mini.png)](https://insight.sensiolabs.com/projects/adecb98a-8484-48cb-be13-803decc475bc)
 
-Handle all the hard stuff related to EU MOSS tax/vat regulations, the way it should be.
+Handle all the hard stuff related to EU MOSS tax/vat regulations, the way it should be. This is a fork of [mpociot/vat-calculator](https://github.com/mpociot/vat-calculator) without Laravel/Cashier support.
 
 ```php
 // Easy to use!
-use Mpociot\VatCalculator\VatCalculator;
+use Spaze\VatCalculator\VatCalculator;
 
 $vatCalculator = new VatCalculator();
 $countryCode = $vatCalculator->getIpBasedCountry();
@@ -42,7 +42,7 @@ $vatCalculator->isValidVatNumber('NL123456789B01');
 In order to install the VAT Calculator, just run
 
 ```bash
-$ composer require mpociot/vat-calculator
+$ composer require spaze/vat-calculator
 ```
 	
 <a name="installation-standalone"></a>
@@ -53,7 +53,7 @@ This package is designed for standalone usage. Simply create a new instance of t
 Example:
 
 ```php
-use Mpociot\VatCalculator\VatCalculator;
+use Spaze\VatCalculator\VatCalculator;
 
 $vatCalculator = new VatCalculator();
 $vatCalculator->setBusinessCountryCode('DE');
@@ -128,15 +128,12 @@ This service relies on a third party SOAP API provided by the EU. If, for whatev
 try {
 	$vat_details = $vatCalculator->getVatDetails('NL 123456789 B01');
 	print_r($vat_details);
-	/* Outputs
-	stdClass Object
+	/* Outputs VatDetails object, use getters to access values
+	VatDetails Object
 	(
-		[countryCode] => NL
-		[vatNumber] => 123456789B01
-		[requestDate] => 2017-04-06+02:00
-		[valid] => false
-		[name] => Name of the company
-		[address] => Address of the company
+		[valid:VatDetails:private] => false
+		[countryCode:VatDetails:private] => NL
+		[vatNumber:VatDetails:private] => 123456789B01
 	)
 	*/
 } catch( VatCheckUnavailableException $e ){

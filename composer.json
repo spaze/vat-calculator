@@ -1,5 +1,5 @@
 {
-    "name": "mpociot/vat-calculator",
+    "name": "spaze/vat-calculator",
     "description": "EU VAT calculation, the way it should be.",
     "keywords": ["VAT","Tax","EU MOSS", "VAT ID", "tax calculation", "vat calculation", "cashier"],
     "license": "MIT",
@@ -25,7 +25,7 @@
             "src/controllers/Controller.php"
         ],
         "psr-0": {
-            "Mpociot\\VatCalculator": "src/"
+            "Spaze\\VatCalculator": "src/"
         }
     },
     "minimum-stability": "stable",

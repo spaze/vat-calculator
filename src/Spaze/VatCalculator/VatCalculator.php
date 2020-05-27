@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-namespace Mpociot\VatCalculator;
+namespace Spaze\VatCalculator;
 
-use Mpociot\VatCalculator\Exceptions\VatCheckUnavailableException;
+use Spaze\VatCalculator\Exceptions\VatCheckUnavailableException;
 use SoapClient;
 use SoapFault;
 

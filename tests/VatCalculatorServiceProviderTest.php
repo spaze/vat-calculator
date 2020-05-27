@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\VatCalculator;
+namespace Spaze\VatCalculator;
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
@@ -38,7 +38,7 @@ class VatCalculatorServiceProviderTest extends PHPUnit_Framework_TestCase
         $app['validator']->shouldReceive('extend');
         $app['validator']->shouldReceive('addNamespace');
         $app['validator']->shouldReceive('resolver');
-        $sp = m::mock('Mpociot\VatCalculator\VatCalculatorServiceProvider[publishes,loadTranslationsFrom,registerRoutes]',
+        $sp = m::mock('Spaze\VatCalculator\VatCalculatorServiceProvider[publishes,loadTranslationsFrom,registerRoutes]',
             [$app]
         );
         $sp->shouldAllowMockingProtectedMethods();
@@ -74,7 +74,7 @@ class VatCalculatorServiceProviderTest extends PHPUnit_Framework_TestCase
 
     public function testShouldRegister()
     {
-        $sp = m::mock('Mpociot\VatCalculator\VatCalculatorServiceProvider[mergeConfig,registerVatCalculator,registerFacade]',
+        $sp = m::mock('Spaze\VatCalculator\VatCalculatorServiceProvider[mergeConfig,registerVatCalculator,registerFacade]',
             ['something']
         );
         $sp->shouldAllowMockingProtectedMethods();
@@ -88,7 +88,7 @@ class VatCalculatorServiceProviderTest extends PHPUnit_Framework_TestCase
     public function testShouldMergeConfig()
     {
         $test = $this;
-        $sp = m::mock('Mpociot\VatCalculator\VatCalculatorServiceProvider', ['app'])
+        $sp = m::mock('Spaze\VatCalculator\VatCalculatorServiceProvider', ['app'])
             ->shouldDeferMissing()
             ->shouldAllowMockingProtectedMethods();
 
@@ -107,7 +107,7 @@ class VatCalculatorServiceProviderTest extends PHPUnit_Framework_TestCase
             ->once()
             ->with(m::type('callable'));
 
-        $sp = m::mock('Mpociot\VatCalculator\VatCalculatorServiceProvider', [$app])
+        $sp = m::mock('Spaze\VatCalculator\VatCalculatorServiceProvider', [$app])
             ->shouldDeferMissing();
         $sp->registerFacade();
     }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Mpociot\VatCalculator\tests;
+namespace Spaze\VatCalculator\tests;
 
 use Illuminate\Support\Facades\Validator;
 use Mockery as m;
-use Mpociot\VatCalculator\Exceptions\VatCheckUnavailableException;
-use Mpociot\VatCalculator\Facades\VatCalculator;
-use Mpociot\VatCalculator\VatCalculatorServiceProvider;
+use Spaze\VatCalculator\Exceptions\VatCheckUnavailableException;
+use Spaze\VatCalculator\Facades\VatCalculator;
+use Spaze\VatCalculator\VatCalculatorServiceProvider;
 use Orchestra\Testbench\TestCase;
 
 class VatCalculatorValidatorExtensionTest extends TestCase

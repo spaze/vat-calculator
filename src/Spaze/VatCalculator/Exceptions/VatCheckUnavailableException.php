@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Mpociot\VatCalculator\Exceptions;
+namespace Spaze\VatCalculator\Exceptions;
 
 use Exception;
 
