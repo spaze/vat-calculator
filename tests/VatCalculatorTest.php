@@ -406,7 +406,7 @@ class VatCalculatorTest extends PHPUnit
         $this->assertEquals(0, $result);
     }
 
-    public function testCanValidateValidVATNumber()
+    public function testCanValidateValidVatNumber()
     {
         $config = m::mock('Illuminate\Contracts\Config\Repository');
 
@@ -423,7 +423,7 @@ class VatCalculatorTest extends PHPUnit
         $result = new \stdClass();
         $result->valid = true;
 
-        $vatCheck = $this->getMockFromWsdl(__DIR__.'/checkVatService.wsdl', 'VATService');
+        $vatCheck = $this->getMockFromWsdl(__DIR__.'/checkVatService.wsdl', 'VatService');
         $vatCheck->expects($this->any())
             ->method('checkVat')
             ->with([
@@ -435,16 +435,16 @@ class VatCalculatorTest extends PHPUnit
         $vatNumber = 'DE 190 098 891';
         $vatCalculator = new VatCalculator($config);
         $vatCalculator->setSoapClient($vatCheck);
-        $result = $vatCalculator->isValidVATNumber($vatNumber);
+        $result = $vatCalculator->isValidVatNumber($vatNumber);
         $this->assertTrue($result);
     }
 
-    public function testCanValidateInvalidVATNumber()
+    public function testCanValidateInvalidVatNumber()
     {
         $result = new \stdClass();
         $result->valid = false;
 
-        $vatCheck = $this->getMockFromWsdl(__DIR__.'/checkVatService.wsdl', 'VATService');
+        $vatCheck = $this->getMockFromWsdl(__DIR__.'/checkVatService.wsdl', 'VatService');
         $vatCheck->expects($this->any())
             ->method('checkVat')
             ->with([
@@ -456,13 +456,13 @@ class VatCalculatorTest extends PHPUnit
         $vatNumber = 'SomeInvalidNumber';
         $vatCalculator = new VatCalculator();
         $vatCalculator->setSoapClient($vatCheck);
-        $result = $vatCalculator->isValidVATNumber($vatNumber);
+        $result = $vatCalculator->isValidVatNumber($vatNumber);
         $this->assertFalse($result);
     }
 
-    public function testValidateVATNumberReturnsFalseOnSoapFailure()
+    public function testValidateVatNumberReturnsFalseOnSoapFailure()
     {
-        $vatCheck = $this->getMockFromWsdl(__DIR__.'/checkVatService.wsdl', 'VATService');
+        $vatCheck = $this->getMockFromWsdl(__DIR__.'/checkVatService.wsdl', 'VatService');
         $vatCheck->expects($this->any())
             ->method('checkVat')
             ->with([
@@ -474,13 +474,13 @@ class VatCalculatorTest extends PHPUnit
         $vatNumber = 'SomeInvalidNumber';
         $vatCalculator = new VatCalculator();
         $vatCalculator->setSoapClient($vatCheck);
-        $result = $vatCalculator->isValidVATNumber($vatNumber);
+        $result = $vatCalculator->isValidVatNumber($vatNumber);
         $this->assertFalse($result);
     }
 
-    public function testValidateVATNumberReturnsFalseOnSoapFailureWithoutForwarding()
+    public function testValidateVatNumberReturnsFalseOnSoapFailureWithoutForwarding()
     {
-        $vatCheck = $this->getMockFromWsdl(__DIR__.'/checkVatService.wsdl', 'VATService');
+        $vatCheck = $this->getMockFromWsdl(__DIR__.'/checkVatService.wsdl', 'VatService');
         $vatCheck->expects($this->any())
             ->method('checkVat')
             ->with([
@@ -502,14 +502,14 @@ class VatCalculatorTest extends PHPUnit
         $vatNumber = 'SomeInvalidNumber';
         $vatCalculator = new VatCalculator($config);
         $vatCalculator->setSoapClient($vatCheck);
-        $result = $vatCalculator->isValidVATNumber($vatNumber);
+        $result = $vatCalculator->isValidVatNumber($vatNumber);
         $this->assertFalse($result);
     }
 
-    public function testValidateVATNumberThrowsExceptionOnSoapFailure()
+    public function testValidateVatNumberThrowsExceptionOnSoapFailure()
     {
-        $this->setExpectedException(\Mpociot\VatCalculator\Exceptions\VATCheckUnavailableException::class);
-        $vatCheck = $this->getMockFromWsdl(__DIR__.'/checkVatService.wsdl', 'VATService');
+        $this->setExpectedException(\Mpociot\VatCalculator\Exceptions\VatCheckUnavailableException::class);
+        $vatCheck = $this->getMockFromWsdl(__DIR__.'/checkVatService.wsdl', 'VatService');
         $vatCheck->expects($this->any())
             ->method('checkVat')
             ->with([
@@ -531,12 +531,12 @@ class VatCalculatorTest extends PHPUnit
         $vatNumber = 'SomeInvalidNumber';
         $vatCalculator = new VatCalculator($config);
         $vatCalculator->setSoapClient($vatCheck);
-        $vatCalculator->isValidVATNumber($vatNumber);
+        $vatCalculator->isValidVatNumber($vatNumber);
     }
 
-    public function testCannotValidateVATNumberWhenServiceIsDown()
+    public function testCannotValidateVatNumberWhenServiceIsDown()
     {
-        $this->setExpectedException(\Mpociot\VatCalculator\Exceptions\VATCheckUnavailableException::class);
+        $this->setExpectedException(\Mpociot\VatCalculator\Exceptions\VatCheckUnavailableException::class);
 
         $result = new \stdClass();
         $result->valid = false;
@@ -544,7 +544,7 @@ class VatCalculatorTest extends PHPUnit
         $vatNumber = 'SomeInvalidNumber';
         $vatCalculator = new VatCalculator();
         $vatCalculator->setSoapClient(false);
-        $vatCalculator->isValidVATNumber($vatNumber);
+        $vatCalculator->isValidVatNumber($vatNumber);
     }
 
     public function testCanResolveIPToCountry()
@@ -572,7 +572,7 @@ class VatCalculatorTest extends PHPUnit
         $this->assertFalse($country);
     }
 
-    public function testCompanyInBusinessCountryGetsValidVATRate()
+    public function testCompanyInBusinessCountryGetsValidVatRate()
     {
         $net = 24.00;
         $countryCode = 'DE';
@@ -608,7 +608,7 @@ class VatCalculatorTest extends PHPUnit
         $this->assertEquals(4.56, $vatCalculator->getTaxValue());
     }
 
-    public function testCompanyInBusinessCountryGetsValidVATRateDirectSet()
+    public function testCompanyInBusinessCountryGetsValidVatRateDirectSet()
     {
         $net = 24.00;
         $countryCode = 'DE';
@@ -621,7 +621,7 @@ class VatCalculatorTest extends PHPUnit
         $this->assertEquals(4.56, $vatCalculator->getTaxValue());
     }
 
-    public function testCompanyOutsideBusinessCountryGetsValidVATRate()
+    public function testCompanyOutsideBusinessCountryGetsValidVatRate()
     {
         $net = 24.00;
         $countryCode = 'DE';
@@ -646,7 +646,7 @@ class VatCalculatorTest extends PHPUnit
         $this->assertEquals(0.00, $vatCalculator->getTaxValue());
     }
 
-    public function testChecksPostalCodeForVATExceptions()
+    public function testChecksPostalCodeForVatExceptions()
     {
         $net = 24.00;
         $vatCalculator = new VatCalculator();
@@ -697,16 +697,16 @@ class VatCalculatorTest extends PHPUnit
         $this->assertEquals(4.80, $vatCalculator->getTaxValue());
     }
 
-    public function testShouldCollectVAT()
+    public function testShouldCollectVat()
     {
         $vatCalculator = new VatCalculator();
-        $this->assertTrue($vatCalculator->shouldCollectVAT('DE'));
-        $this->assertTrue($vatCalculator->shouldCollectVAT('NL'));
-        $this->assertFalse($vatCalculator->shouldCollectVAT(''));
-        $this->assertFalse($vatCalculator->shouldCollectVAT('XXX'));
+        $this->assertTrue($vatCalculator->shouldCollectVat('DE'));
+        $this->assertTrue($vatCalculator->shouldCollectVat('NL'));
+        $this->assertFalse($vatCalculator->shouldCollectVat(''));
+        $this->assertFalse($vatCalculator->shouldCollectVat('XXX'));
     }
 
-    public function testShouldCollectVATFromConfig()
+    public function testShouldCollectVatFromConfig()
     {
         $countryCode = 'TEST';
         $taxKey = 'vat_calculator.rules.'.strtoupper($countryCode);
@@ -728,7 +728,7 @@ class VatCalculatorTest extends PHPUnit
             ->andReturn(false);
 
         $vatCalculator = new VatCalculator($config);
-        $this->assertTrue($vatCalculator->shouldCollectVAT($countryCode));
+        $this->assertTrue($vatCalculator->shouldCollectVat($countryCode));
     }
 
     public function testCalculateNetPriceWithoutCountry()

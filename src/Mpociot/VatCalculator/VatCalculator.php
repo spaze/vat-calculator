@@ -2,7 +2,7 @@
 
 namespace Mpociot\VatCalculator;
 
-use Mpociot\VatCalculator\Exceptions\VATCheckUnavailableException;
+use Mpociot\VatCalculator\Exceptions\VatCheckUnavailableException;
 use SoapClient;
 use SoapFault;
 
@@ -429,7 +429,7 @@ class VatCalculator
      *
      * @return bool
      */
-    public function shouldCollectVAT($countryCode)
+    public function shouldCollectVat($countryCode)
     {
         $taxKey = 'vat_calculator.rules.'.strtoupper($countryCode);
 
@@ -644,13 +644,13 @@ class VatCalculator
     /**
      * @param $vatNumber
      *
-     * @throws VATCheckUnavailableException
+     * @throws VatCheckUnavailableException
      *
      * @return bool
      */
-    public function isValidVATNumber($vatNumber)
+    public function isValidVatNumber($vatNumber)
     {
-        $details = self::getVATDetails($vatNumber);
+        $details = self::getVatDetails($vatNumber);
 
         if ($details) {
             return $details->valid;
@@ -662,11 +662,11 @@ class VatCalculator
     /**
      * @param $vatNumber
      *
-     * @throws VATCheckUnavailableException
+     * @throws VatCheckUnavailableException
      *
      * @return object|false
      */
-    public function getVATDetails($vatNumber)
+    public function getVatDetails($vatNumber)
     {
         $vatNumber = str_replace([' ', "\xC2\xA0", "\xA0", '-', '.', ','], '', trim($vatNumber));
         $countryCode = substr($vatNumber, 0, 2);
@@ -682,17 +682,17 @@ class VatCalculator
                 return $result;
             } catch (SoapFault $e) {
                 if ($this->forwardSoapFaults) {
-                    throw new VATCheckUnavailableException($e->getMessage(), $e->getCode(), $e->getPrevious());
+                    throw new VatCheckUnavailableException($e->getMessage(), $e->getCode(), $e->getPrevious());
                 }
 
                 return false;
             }
         }
-        throw new VATCheckUnavailableException('The VAT check service is currently unavailable. Please try again later.');
+        throw new VatCheckUnavailableException('The VAT check service is currently unavailable. Please try again later.');
     }
 
     /**
-     * @throws VATCheckUnavailableException
+     * @throws VatCheckUnavailableException
      *
      * @return void
      */
@@ -705,7 +705,7 @@ class VatCalculator
             $this->soapClient = new SoapClient(self::VAT_SERVICE_URL);
         } catch (SoapFault $e) {
             if (isset($this->config) && $this->config->get('vat_calculator.forward_soap_faults')) {
-                throw new VATCheckUnavailableException($e->getMessage(), $e->getCode(), $e->getPrevious());
+                throw new VatCheckUnavailableException($e->getMessage(), $e->getCode(), $e->getPrevious());
             }
 
             $this->soapClient = false;

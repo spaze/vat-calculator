@@ -18,7 +18,7 @@ VatCalculator::calculate( 24.00, $countryCode, $postalCode );
 VatCalculator::calculate( 71.00, 'DE', '41352', $isCompany = true );
 VatCalculator::getTaxRateForLocation( 'NL' );
 // Check validity of a VAT number
-VatCalculator::isValidVATNumber('NL123456789B01');
+VatCalculator::isValidVatNumber('NL123456789B01');
 ```
 ## Contents
 
@@ -90,25 +90,25 @@ $taxValue   = VatCalculator::getTaxValue(); // 4.56
 <a name="validate-eu-vat-numbers"></a>
 ### Validate EU VAT numbers
 
-Prior to validating your customers VAT numbers, you can use the `shouldCollectVAT` method to check if the country code requires you to collect VAT
+Prior to validating your customers VAT numbers, you can use the `shouldCollectVat` method to check if the country code requires you to collect VAT
 in the first place.
 
 ```php
-if (VatCalculator::shouldCollectVAT('DE')) {
+if (VatCalculator::shouldCollectVat('DE')) {
 
 }
 ```
 
-To validate your customers VAT numbers, you can use the `isValidVATNumber` method.
+To validate your customers VAT numbers, you can use the `isValidVatNumber` method.
 The VAT number should be in a format specified by the [VIES](http://ec.europa.eu/taxation_customs/vies/faqvies.do#item_11).
 The given VAT numbers will be truncated and non relevant characters / whitespace will automatically be removed.
 
-This service relies on a third party SOAP API provided by the EU. If, for whatever reason, this API is unavailable a `VATCheckUnavailableException` will be thrown.
+This service relies on a third party SOAP API provided by the EU. If, for whatever reason, this API is unavailable a `VatCheckUnavailableException` will be thrown.
 
 ```php
 try {
-	$validVAT = VatCalculator::isValidVATNumber('NL 123456789 B01');
-} catch( VATCheckUnavailableException $e ){
+	$validVat = VatCalculator::isValidVatNumber('NL 123456789 B01');
+} catch( VatCheckUnavailableException $e ){
 	// Please handle me
 }
 ```
@@ -116,15 +116,15 @@ try {
 <a name="vat-number-details"></a>
 ### Get EU VAT number details
 
-To get the details of a VAT number, you can use the `getVATDetails` method.
+To get the details of a VAT number, you can use the `getVatDetails` method.
 The VAT number should be in a format specified by the [VIES](http://ec.europa.eu/taxation_customs/vies/faqvies.do#item_11).
 The given VAT numbers will be truncated and non relevant characters / whitespace will automatically be removed.
 
-This service relies on a third party SOAP API provided by the EU. If, for whatever reason, this API is unavailable a `VATCheckUnavailableException` will be thrown.
+This service relies on a third party SOAP API provided by the EU. If, for whatever reason, this API is unavailable a `VatCheckUnavailableException` will be thrown.
 
 ```php
 try {
-	$vat_details = VatCalculator::getVATDetails('NL 123456789 B01');
+	$vat_details = VatCalculator::getVatDetails('NL 123456789 B01');
 	print_r($vat_details);
 	/* Outputs
 	stdClass Object
@@ -137,7 +137,7 @@ try {
 		[address] => Address of the company
 	)
 	*/
-} catch( VATCheckUnavailableException $e ){
+} catch( VatCheckUnavailableException $e ){
 	// Please handle me
 }
 ```

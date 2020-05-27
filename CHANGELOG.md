@@ -10,7 +10,7 @@
 - Added Cashier 6 support
 
 #### v1.6.3 `2016-04-07`
-- Added "shouldCollectVAT" method
+- Added "shouldCollectVat" method
 
 #### v1.6.2 `2016-02-10`
 - Added polish validation rule message

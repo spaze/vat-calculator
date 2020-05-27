@@ -4,7 +4,7 @@ namespace Mpociot\VatCalculator\tests;
 
 use Illuminate\Support\Facades\Validator;
 use Mockery as m;
-use Mpociot\VatCalculator\Exceptions\VATCheckUnavailableException;
+use Mpociot\VatCalculator\Exceptions\VatCheckUnavailableException;
 use Mpociot\VatCalculator\Facades\VatCalculator;
 use Mpociot\VatCalculator\VatCalculatorServiceProvider;
 use Orchestra\Testbench\TestCase;
@@ -28,11 +28,11 @@ class VatCalculatorValidatorExtensionTest extends TestCase
         return [VatCalculatorServiceProvider::class];
     }
 
-    public function testValidatesVATNumber()
+    public function testValidatesVatNumber()
     {
         $vatNumber = 'DE 190 098 891';
 
-        VatCalculator::shouldReceive('isValidVATNumber')
+        VatCalculator::shouldReceive('isValidVatNumber')
             ->with($vatNumber)
             ->once()
             ->andReturnTrue();
@@ -42,11 +42,11 @@ class VatCalculatorValidatorExtensionTest extends TestCase
         $this->assertTrue($validator->passes());
     }
 
-    public function testValidatesInvalidVATNumber()
+    public function testValidatesInvalidVatNumber()
     {
         $vatNumber = '098 891';
 
-        VatCalculator::shouldReceive('isValidVATNumber')
+        VatCalculator::shouldReceive('isValidVatNumber')
             ->with($vatNumber)
             ->once()
             ->andReturnFalse();
@@ -56,14 +56,14 @@ class VatCalculatorValidatorExtensionTest extends TestCase
         $this->assertTrue($validator->fails());
     }
 
-    public function testValidatesUnavailableVATNumberCheck()
+    public function testValidatesUnavailableVatNumberCheck()
     {
         $vatNumber = '098 891';
 
-        VatCalculator::shouldReceive('isValidVATNumber')
+        VatCalculator::shouldReceive('isValidVatNumber')
             ->with($vatNumber)
             ->once()
-            ->andThrow(new VATCheckUnavailableException());
+            ->andThrow(new VatCheckUnavailableException());
 
         $validator = Validator::make(['vat_number' => $vatNumber], ['vat_number' => 'required|vat_number']);
 
@@ -74,10 +74,10 @@ class VatCalculatorValidatorExtensionTest extends TestCase
     {
         $vatNumber = '098 891';
 
-        VatCalculator::shouldReceive('isValidVATNumber')
+        VatCalculator::shouldReceive('isValidVatNumber')
             ->with($vatNumber)
             ->once()
-            ->andThrow(new VATCheckUnavailableException());
+            ->andThrow(new VatCheckUnavailableException());
 
         $validator = Validator::make(['vat_number' => $vatNumber], ['vat_number' => 'required|vat_number']);
 
