@@ -560,7 +560,7 @@ class VatCalculatorTest extends PHPUnit
         self::$file_get_contents_result = '0';
         $vatCalculator = new VatCalculator();
         $country = $vatCalculator->getIpBasedCountry();
-        $this->assertFalse($country);
+        $this->assertNull($country);
     }
 
     public function testCanHandleIPServiceDowntime()
@@ -569,7 +569,7 @@ class VatCalculatorTest extends PHPUnit
         $_SERVER['REMOTE_ADDR'] = '';
         $vatCalculator = new VatCalculator();
         $country = $vatCalculator->getIpBasedCountry();
-        $this->assertFalse($country);
+        $this->assertNull($country);
     }
 
     public function testCompanyInBusinessCountryGetsValidVatRate()

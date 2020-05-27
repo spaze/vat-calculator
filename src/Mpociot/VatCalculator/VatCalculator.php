@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace Mpociot\VatCalculator;
 
@@ -8,26 +9,41 @@ use SoapFault;
 
 class VatCalculator
 {
+
+    /** @var string */
+    public const VAT_HIGH = 'high';
+
+    /** @var string */
+    public const VAT_LOW = 'low';
+
+    /** @var null */
+    public const VAT_GENERAL = null;
+
     /**
      * VAT Service check URL provided by the EU.
+     *
+     * @var string
      */
     const VAT_SERVICE_URL = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 
     /**
      * We're using the free ip2c service to lookup IP 2 country.
+     *
+     * @var string
      */
     const GEOCODE_SERVICE_URL = 'http://ip2c.org/';
 
-    protected $soapClient;
+    /** @var SoapClient */
+    private $soapClient;
 
     /**
      * All available tax rules and their exceptions.
      *
      * Taken from: http://ec.europa.eu/taxation_customs/resources/documents/taxation/vat/how_vat_works/rates/vat_rates_en.pdf
      *
-     * @var array
+     * @var array<string, array>
      */
-    protected $taxRules = [
+    private $taxRules = [
         'AT' => [ // Austria
             'rate'       => 0.20,
             'exceptions' => [
@@ -133,8 +149,8 @@ class VatCalculator
         'NL' => [ // Netherlands
             'rate' => 0.21,
             'rates' => [
-                'high' => 0.21,
-                'low' => 0.09,
+                self::VAT_HIGH => 0.21,
+                self::VAT_LOW => 0.09,
             ],
         ],
         'PL' => [ // Poland
@@ -172,8 +188,8 @@ class VatCalculator
         'CH' => [ // Switzerland
             'rate' => 0.077,
             'rates' => [
-                'high' => 0.077,
-                'low' => 0.025,
+                self::VAT_HIGH => 0.077,
+                self::VAT_LOW => 0.025,
             ],
         ],
         'TR' => [ // Turkey
@@ -187,9 +203,9 @@ class VatCalculator
     /**
      * All possible postal code exceptions.
      *
-     * @var array
+     * @var array<string, array>
      */
-    protected $postalCodeExceptions = [
+    private $postalCodeExceptions = [
         'AT' => [
             [
                 'postalCode' => '/^6691$/',
@@ -334,79 +350,51 @@ class VatCalculator
         ],
     ];
 
-    /**
-     * @var float
-     */
-    protected $netPrice = 0.0;
+    /** @var float */
+    private $netPrice = 0.0;
 
-    /**
-     * @var string
-     */
-    protected $countryCode;
+    /** @var string */
+    private $countryCode;
 
-    /**
-     * @var string
-     */
-    protected $postalCode;
+    /** @var string */
+    private $postalCode;
 
-    /**
-     * @var float
-     */
-    protected $taxValue = 0;
+    /** @var float */
+    private $taxValue = 0;
 
-    /**
-     * @var float
-     */
-    protected $taxRate = 0;
+    /** @var float */
+    private $taxRate = 0;
 
-    /**
-     * The calculate net + tax value.
-     *
-     * @var float
-     */
-    protected $value = 0;
+    /** @var bool */
+    private $company = false;
 
-    /**
-     * @var bool
-     */
-    protected $company = false;
+    /** @var string */
+    private $businessCountryCode;
 
-    /**
-     * @var string
-     */
-    protected $businessCountryCode;
+    /** @var bool */
+    private $forwardSoapFaults = false;
 
-    /**
-     * @var bool
-     */
-    protected $forwardSoapFaults = false;
 
-    /**
-     * Finds the client IP address.
-     *
-     * @return mixed
-     */
-    private function getClientIp()
+    private function getClientIp(): ?string
     {
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
             $clientIpAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
         } elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
             $clientIpAddress = $_SERVER['REMOTE_ADDR'];
         } else {
-            $clientIpAddress = '';
+            $clientIpAddress = null;
         }
 
         return $clientIpAddress;
     }
 
+
     /**
      * Returns the ISO 3166-1 alpha-2 two letter
      * country code for the client IP. If the
      * IP can't be resolved it returns false.
-     *
-     * @return bool|string
      */
-    public function getIpBasedCountry()
+    public function getIpBasedCountry(): ?string
     {
         $ip = $this->getClientIp();
         $url = self::GEOCODE_SERVICE_URL.$ip;
@@ -418,35 +406,29 @@ class VatCalculator
                 return $data[1];
                 break;
             default:
-                return false;
+                return null;
         }
     }
 
-    /**
-     * Determines if you need to collect VAT for the given country code.
-     *
-     * @param $countryCode
-     *
-     * @return bool
-     */
-    public function shouldCollectVat($countryCode)
+
+    public function shouldCollectVat(string $countryCode): bool
     {
         return isset($this->taxRules[strtoupper($countryCode)]);
     }
+
 
     /**
      * Calculate the VAT based on the net price, country code and indication if the
      * customer is a company or not.
      *
-     * @param int|float   $netPrice    The net price to use for the calculation
-     * @param null|string $countryCode The country code to use for the rate lookup
-     * @param null|string $postalCode  The postal code to use for the rate exception lookup
-     * @param null|bool   $company
-     * @param null|string $type        The type can be low or high
-     *
+     * @param float $netPrice
+     * @param string|null $countryCode
+     * @param string|null $postalCode
+     * @param bool|null $company
+     * @param string|null $type
      * @return float
      */
-    public function calculate($netPrice, $countryCode = null, $postalCode = null, $company = null, $type = null)
+    public function calculate(float $netPrice, ?string $countryCode = null, ?string $postalCode = null, ?bool $company = null, ?string $type = self::VAT_GENERAL): float
     {
         if ($countryCode) {
             $this->setCountryCode($countryCode);
@@ -460,24 +442,22 @@ class VatCalculator
         $this->netPrice = floatval($netPrice);
         $this->taxRate = $this->getTaxRateForLocation($this->getCountryCode(), $this->getPostalCode(), $this->isCompany(), $type);
         $this->taxValue = $this->taxRate * $this->netPrice;
-        $this->value = $this->netPrice + $this->taxValue;
-
-        return $this->value;
+        return $this->netPrice + $this->taxValue;
     }
+
 
     /**
      * Calculate the net price on the gross price, country code and indication if the
      * customer is a company or not.
      *
-     * @param int|float   $gross       The gross price to use for the calculation
-     * @param null|string $countryCode The country code to use for the rate lookup
-     * @param null|string $postalCode  The postal code to use for the rate exception lookup
-     * @param null|bool   $company
-     * @param null|string $type        The type can be low or high
-     *
+     * @param float $gross
+     * @param string|null $countryCode
+     * @param string|null $postalCode
+     * @param bool|null $company
+     * @param string|null $type
      * @return float
      */
-    public function calculateNet($gross, $countryCode = null, $postalCode = null, $company = null, $type = null)
+    public function calculateNet(float $gross, ?string $countryCode = null, ?string $postalCode = null, ?bool $company = null, ?string $type = self::VAT_GENERAL): float
     {
         if ($countryCode) {
             $this->setCountryCode($countryCode);
@@ -489,119 +469,102 @@ class VatCalculator
             $this->setCompany($company);
         }
 
-        $this->value = floatval($gross);
+        $value = floatval($gross);
         $this->taxRate = $this->getTaxRateForLocation($this->getCountryCode(), $this->getPostalCode(), $this->isCompany(), $type);
-        $this->taxValue = $this->taxRate > 0 ? $this->value / (1 + $this->taxRate) * $this->taxRate : 0;
-        $this->netPrice = $this->value - $this->taxValue;
+        $this->taxValue = $this->taxRate > 0 ? $value / (1 + $this->taxRate) * $this->taxRate : 0;
+        $this->netPrice = $value - $this->taxValue;
 
         return $this->netPrice;
     }
 
-    /**
-     * @return float
-     */
-    public function getNetPrice()
+
+    public function getNetPrice(): float
     {
         return $this->netPrice;
     }
 
-    /**
-     * @return string
-     */
-    public function getCountryCode()
+
+    public function getCountryCode(): string
     {
         return strtoupper($this->countryCode);
     }
 
-    /**
-     * @param mixed $countryCode
-     */
-    public function setCountryCode($countryCode)
+
+    public function setCountryCode(string $countryCode): void
     {
         $this->countryCode = $countryCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getPostalCode()
+
+    public function getPostalCode(): string
     {
         return $this->postalCode;
     }
 
-    /**
-     * @param mixed $postalCode
-     */
-    public function setPostalCode($postalCode)
+
+    public function setPostalCode(string $postalCode): void
     {
         $this->postalCode = $postalCode;
     }
 
-    /**
-     * @return float
-     */
-    public function getTaxRate()
+
+    public function getTaxRate(): float
     {
         return $this->taxRate;
     }
 
-    /**
-     * @return bool
-     */
-    public function isCompany()
+
+    public function isCompany(): bool
     {
         return $this->company;
     }
 
-    /**
-     * @param bool $company
-     */
-    public function setCompany($company)
+
+    public function setCompany(bool $company): void
     {
         $this->company = $company;
     }
 
-    /**
-     * @param string $businessCountryCode
-     */
-    public function setBusinessCountryCode($businessCountryCode)
+
+    public function setBusinessCountryCode(string $businessCountryCode): void
     {
         $this->businessCountryCode = $businessCountryCode;
     }
 
-    public function forwardSoapFaults()
+
+    public function forwardSoapFaults(): void
     {
         $this->forwardSoapFaults = true;
     }
+
 
     /**
      * Returns the tax rate for the given country code.
      * This method is used to allow backwards compatibility.
      *
-     * @param $countryCode
+     * @param string $countryCode
      * @param bool $company
-     * @param string $type
-     *
+     * @param string|null $type
      * @return float
      */
-    public function getTaxRateForCountry($countryCode, $company = false, $type = null)
+    public function getTaxRateForCountry(string $countryCode, bool $company = false, ?string $type = null): float
     {
         return $this->getTaxRateForLocation($countryCode, null, $company, $type);
     }
+
 
     /**
      * Returns the tax rate for the given country code.
      * If a postal code is provided, it will try to lookup the different
      * postal code exceptions that are possible.
      *
-     * @param string      $countryCode
+     * @param string $countryCode
      * @param string|null $postalCode
-     * @param bool|false  $company
+     * @param bool $company
      * @param string|null $type
-     *
      * @return float
      */
-    public function getTaxRateForLocation($countryCode, $postalCode = null, $company = false, $type = null)
+    public function getTaxRateForLocation(string $countryCode, ?string $postalCode = null, bool $company = false, ?string $type = null): float
     {
         if ($company && strtoupper($countryCode) !== strtoupper($this->businessCountryCode)) {
             return 0;
@@ -627,40 +590,36 @@ class VatCalculator
         return isset($this->taxRules[strtoupper($countryCode)]['rate']) ? $this->taxRules[strtoupper($countryCode)]['rate'] : 0;
     }
 
-    /**
-     * @return float
-     */
-    public function getTaxValue()
+
+    public function getTaxValue(): float
     {
         return $this->taxValue;
     }
 
+
     /**
-     * @param $vatNumber
-     *
-     * @throws VatCheckUnavailableException
-     *
+     * @param string $vatNumber
      * @return bool
+     * @throws VatCheckUnavailableException
      */
-    public function isValidVatNumber($vatNumber)
+    public function isValidVatNumber(string $vatNumber): bool
     {
         $details = $this->getVatDetails($vatNumber);
 
         if ($details) {
-            return $details->valid;
+            return $details->isValid();
         } else {
             return false;
         }
     }
 
+
     /**
-     * @param $vatNumber
-     *
+     * @param string $vatNumber
+     * @return VatDetails|null
      * @throws VatCheckUnavailableException
-     *
-     * @return object|false
      */
-    public function getVatDetails($vatNumber)
+    public function getVatDetails(string $vatNumber): ?VatDetails
     {
         $vatNumber = str_replace([' ', "\xC2\xA0", "\xA0", '-', '.', ','], '', trim($vatNumber));
         $countryCode = substr($vatNumber, 0, 2);
@@ -673,24 +632,23 @@ class VatCalculator
                     'countryCode' => $countryCode,
                     'vatNumber' => $vatNumber,
                 ]);
-                return $result;
+                return new VatDetails($result->valid, $result->countryCode, $result->vatNumber);
             } catch (SoapFault $e) {
                 if ($this->forwardSoapFaults) {
                     throw new VatCheckUnavailableException($e->getMessage(), $e->getCode(), $e->getPrevious());
                 }
 
-                return false;
+                return null;
             }
         }
         throw new VatCheckUnavailableException('The VAT check service is currently unavailable. Please try again later.');
     }
 
+
     /**
      * @throws VatCheckUnavailableException
-     *
-     * @return void
      */
-    public function initSoapClient()
+    public function initSoapClient(): void
     {
         if (is_object($this->soapClient) || $this->soapClient === false) {
             return;
@@ -706,11 +664,10 @@ class VatCalculator
         }
     }
 
-    /**
-     * @param SoapClient $soapClient
-     */
-    public function setSoapClient($soapClient)
+
+    public function setSoapClient(SoapClient $soapClient): void
     {
         $this->soapClient = $soapClient;
     }
+
 }
