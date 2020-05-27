@@ -431,9 +431,7 @@ class VatCalculator
      */
     public function shouldCollectVat($countryCode)
     {
-        $taxKey = 'vat_calculator.rules.'.strtoupper($countryCode);
-
-        return isset($this->taxRules[strtoupper($countryCode)]) || (isset($this->config) && $this->config->has($taxKey));
+        return isset($this->taxRules[strtoupper($countryCode)]);
     }
 
     /**
@@ -608,10 +606,6 @@ class VatCalculator
         if ($company && strtoupper($countryCode) !== strtoupper($this->businessCountryCode)) {
             return 0;
         }
-        $taxKey = 'vat_calculator.rules.'.strtoupper($countryCode);
-        if (isset($this->config) && $this->config->has($taxKey)) {
-            return $this->config->get($taxKey, 0);
-        }
 
         if (isset($this->postalCodeExceptions[$countryCode]) && $postalCode !== null) {
             foreach ($this->postalCodeExceptions[$countryCode] as $postalCodeException) {
@@ -704,7 +698,7 @@ class VatCalculator
         try {
             $this->soapClient = new SoapClient(self::VAT_SERVICE_URL);
         } catch (SoapFault $e) {
-            if (isset($this->config) && $this->config->get('vat_calculator.forward_soap_faults')) {
+            if ($this->forwardSoapFaults) {
                 throw new VatCheckUnavailableException($e->getMessage(), $e->getCode(), $e->getPrevious());
             }
 
