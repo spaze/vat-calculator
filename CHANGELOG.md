@@ -1,7 +1,7 @@
 # Changelog
 
 #### v2.0.0 `2016-06-28`
-- VAT rate detection now supports ZIP codes, to take edge cases into consideration 
+- VAT rate detection now supports ZIP codes, to take edge cases into consideration
 
 #### v1.7.1 `2016-06-16`
 - Fixed bug when using multiple Validator extensions in Laravel

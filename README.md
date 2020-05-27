@@ -44,7 +44,7 @@ In order to install the VAT Calculator, just run
 ```bash
 $ composer require spaze/vat-calculator
 ```
-	
+
 <a name="installation-standalone"></a>
 ### Standalone
 

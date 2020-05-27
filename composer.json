@@ -1,34 +1,34 @@
 {
-    "name": "spaze/vat-calculator",
-    "description": "EU VAT calculation, the way it should be.",
-    "keywords": ["VAT","Tax","EU MOSS", "VAT ID", "tax calculation", "vat calculation"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Michal Špaček",
-            "homepage": "https://www.michalspacek.com/",
-            "email": "mail@michalspacek.cz"
-        },
-        {
-            "name": "Marcel Pociot",
-            "email": "m.pociot@gmail.com"
-        }
-    ],
-    "require": {
-      "php": ">=7.3",
-      "ext-soap": "*"
-    },
-    "require-dev": {
-        "phpunit/php-timer": "1.0.*",
-        "phpunit/phpunit": "4.7.*"
-    },
-    "autoload": {
-        "psr-4": {
-            "Spaze\\VatCalculator\\": "src/"
-        }
-    },
-    "minimum-stability": "stable",
-    "scripts": {
-        "test": "vendor/phpunit/phpunit/phpunit"
-    }
+	"name": "spaze/vat-calculator",
+	"description": "EU VAT calculation, the way it should be.",
+	"keywords": ["VAT","Tax","EU MOSS", "VAT ID", "tax calculation", "vat calculation"],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Michal Špaček",
+			"homepage": "https://www.michalspacek.com/",
+			"email": "mail@michalspacek.cz"
+		},
+		{
+			"name": "Marcel Pociot",
+			"email": "m.pociot@gmail.com"
+		}
+	],
+	"require": {
+	  "php": ">=7.3",
+	  "ext-soap": "*"
+	},
+	"require-dev": {
+		"phpunit/php-timer": "1.0.*",
+		"phpunit/phpunit": "4.7.*"
+	},
+	"autoload": {
+		"psr-4": {
+			"Spaze\\VatCalculator\\": "src/"
+		}
+	},
+	"minimum-stability": "stable",
+	"scripts": {
+		"test": "vendor/phpunit/phpunit/phpunit"
+	}
 }
