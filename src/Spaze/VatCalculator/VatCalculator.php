@@ -440,7 +440,7 @@ class VatCalculator
             $this->setCompany($company);
         }
         $this->netPrice = floatval($netPrice);
-        $this->taxRate = $this->getTaxRateForLocation($this->getCountryCode(), $this->getPostalCode(), $this->isCompany(), $type);
+        $this->taxRate = $this->getCountryCode() === null ? 0 : $this->getTaxRateForLocation($this->getCountryCode(), $this->getPostalCode(), $this->isCompany(), $type);
         $this->taxValue = $this->taxRate * $this->netPrice;
         return $this->netPrice + $this->taxValue;
     }
@@ -470,7 +470,7 @@ class VatCalculator
         }
 
         $value = floatval($gross);
-        $this->taxRate = $this->getTaxRateForLocation($this->getCountryCode(), $this->getPostalCode(), $this->isCompany(), $type);
+        $this->taxRate = $this->getCountryCode() === null ? 0 : $this->getTaxRateForLocation($this->getCountryCode(), $this->getPostalCode(), $this->isCompany(), $type);
         $this->taxValue = $this->taxRate > 0 ? $value / (1 + $this->taxRate) * $this->taxRate : 0;
         $this->netPrice = $value - $this->taxValue;
 
@@ -484,9 +484,9 @@ class VatCalculator
     }
 
 
-    public function getCountryCode(): string
+    public function getCountryCode(): ?string
     {
-        return strtoupper($this->countryCode);
+        return $this->countryCode ? strtoupper($this->countryCode) : null;
     }
 
 
@@ -496,7 +496,7 @@ class VatCalculator
     }
 
 
-    public function getPostalCode(): string
+    public function getPostalCode(): ?string
     {
         return $this->postalCode;
     }
@@ -528,7 +528,7 @@ class VatCalculator
 
     public function setBusinessCountryCode(string $businessCountryCode): void
     {
-        $this->businessCountryCode = $businessCountryCode;
+        $this->businessCountryCode = strtoupper($businessCountryCode);
     }
 
 
@@ -566,7 +566,7 @@ class VatCalculator
      */
     public function getTaxRateForLocation(string $countryCode, ?string $postalCode = null, bool $company = false, ?string $type = null): float
     {
-        if ($company && strtoupper($countryCode) !== strtoupper($this->businessCountryCode)) {
+        if ($company && strtoupper($countryCode) !== $this->businessCountryCode) {
             return 0;
         }
 

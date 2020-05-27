@@ -1,9 +1,14 @@
 {
     "name": "spaze/vat-calculator",
     "description": "EU VAT calculation, the way it should be.",
-    "keywords": ["VAT","Tax","EU MOSS", "VAT ID", "tax calculation", "vat calculation", "cashier"],
+    "keywords": ["VAT","Tax","EU MOSS", "VAT ID", "tax calculation", "vat calculation"],
     "license": "MIT",
     "authors": [
+        {
+            "name": "Michal Špaček",
+            "homepage": "https://www.michalspacek.com/",
+            "email": "mail@michalspacek.cz"
+        },
         {
             "name": "Marcel Pociot",
             "email": "m.pociot@gmail.com"
@@ -14,32 +19,16 @@
       "ext-soap": "*"
     },
     "require-dev": {
-        "illuminate/support": "~5.0",
-        "illuminate/validation": "~5.0",
-        "mockery/mockery": "dev-master",
-        "orchestra/testbench": "~3.0",
+        "phpunit/php-timer": "1.0.*",
         "phpunit/phpunit": "4.7.*"
     },
     "autoload": {
-        "classmap": [
-            "src/controllers/Controller.php"
-        ],
         "psr-0": {
             "Spaze\\VatCalculator": "src/"
         }
     },
     "minimum-stability": "stable",
     "scripts": {
-        "test": "phpunit"
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Mpociot\\VatCalculator\\VatCalculatorServiceProvider"
-            ],
-            "aliases": {
-                "VatCalculator": "Mpociot\\VatCalculator\\Facades\\VatCalculator"
-            }
-        }
+        "test": "vendor/phpunit/phpunit/phpunit"
     }
 }
