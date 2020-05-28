@@ -367,9 +367,6 @@ class VatCalculator
 	/** @var string */
 	private $businessVatNumber;
 
-	/** @var bool */
-	private $forwardSoapFaults = false;
-
 
 	public function shouldCollectVat(string $countryCode): bool
 	{
@@ -498,12 +495,6 @@ class VatCalculator
 	}
 
 
-	public function forwardSoapFaults(): void
-	{
-		$this->forwardSoapFaults = true;
-	}
-
-
 	/**
 	 * Returns the tax rate for the given country code.
 	 * This method is used to allow backwards compatibility.
@@ -583,58 +574,31 @@ class VatCalculator
 	/**
 	 * @param string $vatNumber
 	 * @param string|null $requesterVatNumber
-	 * @return VatDetails|null
+	 * @return VatDetails
 	 * @throws VatCheckUnavailableException
 	 */
-	public function getVatDetails(string $vatNumber, ?string $requesterVatNumber = null): ?VatDetails
+	public function getVatDetails(string $vatNumber, ?string $requesterVatNumber = null): VatDetails
 	{
 		$vatNumber = str_replace([' ', "\xC2\xA0", "\xA0", '-', '.', ','], '', trim($vatNumber));
 		$countryCode = substr($vatNumber, 0, 2);
 		$vatNumber = substr($vatNumber, 2);
-		$this->initSoapClient();
-		$client = $this->soapClient;
-		if ($client) {
-			try {
-
-				if ($requesterVatNumber === null) {
-					$requesterVatNumber = $this->businessVatNumber;
-				}
-
-				$result = $client->checkVatApprox([
-					'countryCode' => $countryCode,
-					'vatNumber' => $vatNumber,
-					'requesterCountryCode' => $requesterVatNumber ? substr($requesterVatNumber, 0, 2) : null,
-					'requesterVatNumber' => $requesterVatNumber ? substr($requesterVatNumber, 2) : null,
-				]);
-				return new VatDetails($result->valid, $result->countryCode, $result->vatNumber, $result->requestIdentifier);
-			} catch (SoapFault $e) {
-				if ($this->forwardSoapFaults) {
-					throw new VatCheckUnavailableException($e->getMessage(), $e->getCode(), $e->getPrevious());
-				}
-
-				return null;
-			}
-		}
-		throw new VatCheckUnavailableException('The VAT check service is currently unavailable. Please try again later.');
-	}
-
-
-	/**
-	 * @throws VatCheckUnavailableException
-	 */
-	public function initSoapClient(): void
-	{
-		if (is_object($this->soapClient) || $this->soapClient === false) {
-			return;
-		}
 		try {
-			$this->soapClient = new SoapClient(self::VAT_SERVICE_URL);
-		} catch (SoapFault $e) {
-			if ($this->forwardSoapFaults) {
-				throw new VatCheckUnavailableException($e->getMessage(), $e->getCode(), $e->getPrevious());
+			if ($this->soapClient === null) {
+				$this->soapClient = new SoapClient(self::VAT_SERVICE_URL);
+			}
+			if ($requesterVatNumber === null) {
+				$requesterVatNumber = $this->businessVatNumber;
 			}
 
-			$this->soapClient = false;
+			$result = $this->soapClient->checkVatApprox([
+				'countryCode' => $countryCode,
+				'vatNumber' => $vatNumber,
+				'requesterCountryCode' => $requesterVatNumber ? substr($requesterVatNumber, 0, 2) : null,
+				'requesterVatNumber' => $requesterVatNumber ? substr($requesterVatNumber, 2) : null,
+			]);
+			return new VatDetails($result->valid, $result->countryCode, $result->vatNumber, $result->requestIdentifier);
+		} catch (SoapFault $e) {
+			throw new VatCheckUnavailableException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
 

@@ -2,6 +2,7 @@
 
 * Version 3 doesn't support Laravel/Cashier anymore (**BC BREAK**).
 * The namespace has been changed for this fork from `Mpociot\VatCalculator` to `Spaze\VatCalculator` (**BC BREAK**)
+* Exceptions (`VatCheckUnavailableException`) are always thrown, `forwardSoapFaults` option has been removed (**BC BREAK**)
 * `getIPBasedCountry()` & `getClientIP()` methods have been removed, use some other package (or `CF-IPCountry` HTTP header if you're behind Cloudflare)
 * Some methods have been properly *camelCased*: methods like `getClientIP()` -> `getClientIp()` and `shouldCollectVAT` -> `shouldCollectVat` and a few more
 * `VATCheckUnavailableException` has been *camelCased* to `VatCheckUnavailableException`

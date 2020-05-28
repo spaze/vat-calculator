@@ -197,48 +197,6 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testValidateVatNumberReturnsFalseOnSoapFailure()
-	{
-		$vatCheck = $this->getMockFromWsdl(__DIR__ . '/checkVatService.wsdl', 'VatService');
-		$vatCheck->expects($this->any())
-			->method('checkVatApprox')
-			->with([
-				'countryCode' => 'So',
-				'vatNumber' => 'meInvalidNumber',
-				'requesterCountryCode' => null,
-				'requesterVatNumber' => null,
-			])
-			->willThrowException(new SoapFault('Server', 'Something went wrong'));
-
-		$vatNumber = 'SomeInvalidNumber';
-		$vatCalculator = new VatCalculator();
-		$vatCalculator->setSoapClient($vatCheck);
-		$result = $vatCalculator->isValidVatNumber($vatNumber);
-		$this->assertFalse($result);
-	}
-
-
-	public function testValidateVatNumberReturnsFalseOnSoapFailureWithoutForwarding()
-	{
-		$vatCheck = $this->getMockFromWsdl(__DIR__ . '/checkVatService.wsdl', 'VatService');
-		$vatCheck->expects($this->any())
-			->method('checkVatApprox')
-			->with([
-				'countryCode' => 'So',
-				'vatNumber' => 'meInvalidNumber',
-				'requesterCountryCode' => null,
-				'requesterVatNumber' => null,
-			])
-			->willThrowException(new SoapFault('Server', 'Something went wrong'));
-
-		$vatNumber = 'SomeInvalidNumber';
-		$vatCalculator = new VatCalculator();
-		$vatCalculator->setSoapClient($vatCheck);
-		$result = $vatCalculator->isValidVatNumber($vatNumber);
-		$this->assertFalse($result);
-	}
-
-
 	public function testValidateVatNumberThrowsExceptionOnSoapFailure()
 	{
 		$this->setExpectedException(VatCheckUnavailableException::class);
@@ -255,7 +213,6 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 
 		$vatNumber = 'SomeInvalidNumber';
 		$vatCalculator = new VatCalculator();
-		$vatCalculator->forwardSoapFaults();
 		$vatCalculator->setSoapClient($vatCheck);
 		$vatCalculator->isValidVatNumber($vatNumber);
 	}
@@ -326,13 +283,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	{
 		$this->setExpectedException(\Spaze\VatCalculator\Exceptions\VatCheckUnavailableException::class);
 
-		$vatCalculator = new class() extends VatCalculator {
-			public function initSoapClient(): void
-			{
-				return;
-			}
-		};
-
+		$vatCalculator = new VatCalculator();
 		$vatNumber = 'SomeInvalidNumber';
 		$vatCalculator->isValidVatNumber($vatNumber);
 	}
