@@ -26,13 +26,6 @@ class VatCalculator
 	 */
 	const VAT_SERVICE_URL = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 
-	/**
-	 * We're using the free ip2c service to lookup IP 2 country.
-	 *
-	 * @var string
-	 */
-	const GEOCODE_SERVICE_URL = 'http://ip2c.org/';
-
 	/** @var SoapClient */
 	private $soapClient;
 
@@ -373,42 +366,6 @@ class VatCalculator
 
 	/** @var bool */
 	private $forwardSoapFaults = false;
-
-
-	private function getClientIp(): ?string
-	{
-		if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
-			$clientIpAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-		} elseif (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR']) {
-			$clientIpAddress = $_SERVER['REMOTE_ADDR'];
-		} else {
-			$clientIpAddress = null;
-		}
-
-		return $clientIpAddress;
-	}
-
-
-	/**
-	 * Returns the ISO 3166-1 alpha-2 two letter
-	 * country code for the client IP. If the
-	 * IP can't be resolved it returns false.
-	 */
-	public function getIpBasedCountry(): ?string
-	{
-		$ip = $this->getClientIp();
-		$url = self::GEOCODE_SERVICE_URL . $ip;
-		$result = file_get_contents($url);
-		switch ($result[0]) {
-			case '1':
-				$data = explode(';', $result);
-
-				return $data[1];
-				break;
-			default:
-				return null;
-		}
-	}
 
 
 	public function shouldCollectVat(string $countryCode): bool

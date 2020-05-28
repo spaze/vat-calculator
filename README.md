@@ -140,19 +140,6 @@ try {
 }
 ```
 
-<a name="get-ip-based-country"></a>
-## Get the IP based Country of your user(s)
-Right now you'll need to show your users a way to select their country - probably a drop down - to use this country for the VAT calculation.
-
-This package has a small helper function, that tries to lookup the Country of the user, based on the IP they have.
-
-```php
-$countryCode = $vatCalculator->getIpBasedCountry();
-```
-
-The `$countryCode` will either be `false`, if the service is unavailable, or the country couldn't be looked up. Otherwise the variable contains the two-letter country code, which can be used to prefill the user selection.
-
-
 <a name="license"></a>
 ## License
 This library is licensed under the MIT license. Please see [License file](LICENSE.md) for more information.

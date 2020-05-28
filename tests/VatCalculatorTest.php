@@ -265,34 +265,6 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testCanResolveIPToCountry()
-	{
-		self::$file_get_contents_result = '1;DE;DEU;Deutschland';
-		$vatCalculator = new VatCalculator();
-		$country = $vatCalculator->getIpBasedCountry();
-		$this->assertEquals('DE', $country);
-	}
-
-
-	public function testCanResolveInvalidIPToCountry()
-	{
-		self::$file_get_contents_result = '0';
-		$vatCalculator = new VatCalculator();
-		$country = $vatCalculator->getIpBasedCountry();
-		$this->assertNull($country);
-	}
-
-
-	public function testCanHandleIPServiceDowntime()
-	{
-		self::$file_get_contents_result = false;
-		$_SERVER['REMOTE_ADDR'] = '';
-		$vatCalculator = new VatCalculator();
-		$country = $vatCalculator->getIpBasedCountry();
-		$this->assertNull($country);
-	}
-
-
 	public function testCompanyInBusinessCountryGetsValidVatRateDirectSet()
 	{
 		$net = 24.00;
