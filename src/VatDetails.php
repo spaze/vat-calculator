@@ -15,12 +15,16 @@ class VatDetails
 	/** @var string */
 	private $vatNumber;
 
+	/** @var string|null */
+	private $requestId;
 
-	public function __construct(bool $valid, string $countryCode, string $vatNumber)
+
+	public function __construct(bool $valid, string $countryCode, string $vatNumber, ?string $requestId)
 	{
 		$this->valid = $valid;
 		$this->countryCode = $countryCode;
 		$this->vatNumber = $vatNumber;
+		$this->requestId = $requestId;
 	}
 
 
@@ -39,6 +43,12 @@ class VatDetails
 	public function getVatNumber(): string
 	{
 		return $this->vatNumber;
+	}
+
+
+	public function getRequestId(): ?string
+	{
+		return $this->requestId;
 	}
 
 }

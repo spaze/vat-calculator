@@ -133,6 +133,7 @@ try {
 		[valid:VatDetails:private] => false
 		[countryCode:VatDetails:private] => NL
 		[vatNumber:VatDetails:private] => 123456789B01
+		[requestId:VatDetails:private] => FOOBAR338
 	)
 	*/
 } catch( VatCheckUnavailableException $e ){

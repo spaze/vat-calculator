@@ -364,6 +364,9 @@ class VatCalculator
 	/** @var string */
 	private $businessCountryCode;
 
+	/** @var string */
+	private $businessVatNumber;
+
 	/** @var bool */
 	private $forwardSoapFaults = false;
 
@@ -489,6 +492,12 @@ class VatCalculator
 	}
 
 
+	public function setBusinessVatNumber(string $businessVatNumber): void
+	{
+		$this->businessVatNumber = $businessVatNumber;
+	}
+
+
 	public function forwardSoapFaults(): void
 	{
 		$this->forwardSoapFaults = true;
@@ -573,10 +582,11 @@ class VatCalculator
 
 	/**
 	 * @param string $vatNumber
+	 * @param string|null $requesterVatNumber
 	 * @return VatDetails|null
 	 * @throws VatCheckUnavailableException
 	 */
-	public function getVatDetails(string $vatNumber): ?VatDetails
+	public function getVatDetails(string $vatNumber, ?string $requesterVatNumber = null): ?VatDetails
 	{
 		$vatNumber = str_replace([' ', "\xC2\xA0", "\xA0", '-', '.', ','], '', trim($vatNumber));
 		$countryCode = substr($vatNumber, 0, 2);
@@ -585,11 +595,18 @@ class VatCalculator
 		$client = $this->soapClient;
 		if ($client) {
 			try {
-				$result = $client->checkVat([
+
+				if ($requesterVatNumber === null) {
+					$requesterVatNumber = $this->businessVatNumber;
+				}
+
+				$result = $client->checkVatApprox([
 					'countryCode' => $countryCode,
 					'vatNumber' => $vatNumber,
+					'requesterCountryCode' => $requesterVatNumber ? substr($requesterVatNumber, 0, 2) : null,
+					'requesterVatNumber' => $requesterVatNumber ? substr($requesterVatNumber, 2) : null,
 				]);
-				return new VatDetails($result->valid, $result->countryCode, $result->vatNumber);
+				return new VatDetails($result->valid, $result->countryCode, $result->vatNumber, $result->requestIdentifier);
 			} catch (SoapFault $e) {
 				if ($this->forwardSoapFaults) {
 					throw new VatCheckUnavailableException($e->getMessage(), $e->getCode(), $e->getPrevious());

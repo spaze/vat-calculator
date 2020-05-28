@@ -149,13 +149,16 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$result->valid = true;
 		$result->countryCode = 'DE';
 		$result->vatNumber = '190098891';
+		$result->requestIdentifier = null;
 
 		$vatCheck = $this->getMockFromWsdl(__DIR__ . '/checkVatService.wsdl', 'VatService');
 		$vatCheck->expects($this->any())
-			->method('checkVat')
+			->method('checkVatApprox')
 			->with([
 				'countryCode' => 'DE',
 				'vatNumber' => '190098891',
+				'requesterCountryCode' => null,
+				'requesterVatNumber' => null,
 			])
 			->willReturn($result);
 
@@ -173,13 +176,16 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$result->valid = false;
 		$result->countryCode = 'So';
 		$result->vatNumber = 'meInvalidNumber';
+		$result->requestIdentifier = null;
 
 		$vatCheck = $this->getMockFromWsdl(__DIR__ . '/checkVatService.wsdl', 'VatService');
 		$vatCheck->expects($this->any())
-			->method('checkVat')
+			->method('checkVatApprox')
 			->with([
 				'countryCode' => 'So',
 				'vatNumber' => 'meInvalidNumber',
+				'requesterCountryCode' => null,
+				'requesterVatNumber' => null,
 			])
 			->willReturn($result);
 
@@ -195,10 +201,12 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	{
 		$vatCheck = $this->getMockFromWsdl(__DIR__ . '/checkVatService.wsdl', 'VatService');
 		$vatCheck->expects($this->any())
-			->method('checkVat')
+			->method('checkVatApprox')
 			->with([
 				'countryCode' => 'So',
 				'vatNumber' => 'meInvalidNumber',
+				'requesterCountryCode' => null,
+				'requesterVatNumber' => null,
 			])
 			->willThrowException(new SoapFault('Server', 'Something went wrong'));
 
@@ -214,10 +222,12 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	{
 		$vatCheck = $this->getMockFromWsdl(__DIR__ . '/checkVatService.wsdl', 'VatService');
 		$vatCheck->expects($this->any())
-			->method('checkVat')
+			->method('checkVatApprox')
 			->with([
 				'countryCode' => 'So',
 				'vatNumber' => 'meInvalidNumber',
+				'requesterCountryCode' => null,
+				'requesterVatNumber' => null,
 			])
 			->willThrowException(new SoapFault('Server', 'Something went wrong'));
 
@@ -234,10 +244,12 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$this->setExpectedException(VatCheckUnavailableException::class);
 		$vatCheck = $this->getMockFromWsdl(__DIR__ . '/checkVatService.wsdl', 'VatService');
 		$vatCheck->expects($this->any())
-			->method('checkVat')
+			->method('checkVatApprox')
 			->with([
 				'countryCode' => 'So',
 				'vatNumber' => 'meInvalidNumber',
+				'requesterCountryCode' => null,
+				'requesterVatNumber' => null,
 			])
 			->willThrowException(new SoapFault('Server', 'Something went wrong'));
 
@@ -246,6 +258,67 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$vatCalculator->forwardSoapFaults();
 		$vatCalculator->setSoapClient($vatCheck);
 		$vatCalculator->isValidVatNumber($vatNumber);
+	}
+
+
+	public function testCanValidateValidVatNumberWithRequesterVatNumber()
+	{
+		$result = new stdClass();
+		$result->valid = true;
+		$result->countryCode = 'DE';
+		$result->vatNumber = '190098891';
+		$result->requestIdentifier = 'FOOBAR338';
+
+		$vatCheck = $this->getMockFromWsdl(__DIR__ . '/checkVatService.wsdl', 'VatService');
+		$vatCheck->expects($this->any())
+			->method('checkVatApprox')
+			->with([
+				'countryCode' => 'DE',
+				'vatNumber' => '190098891',
+				'requesterCountryCode' => 'CZ',
+				'requesterVatNumber' => '26168685',
+			])
+			->willReturn($result);
+
+		$vatNumber = 'DE 190 098 891';
+		$vatCalculator = new VatCalculator();
+		$vatCalculator->setBusinessVatNumber('CZ26168685');
+		$vatCalculator->setSoapClient($vatCheck);
+		$result = $vatCalculator->getVatDetails($vatNumber);
+		$this->assertTrue($result->isValid());
+		$this->assertSame('DE', $result->getCountryCode());
+		$this->assertSame('190098891', $result->getVatNumber());
+		$this->assertSame('FOOBAR338', $result->getRequestId());
+	}
+
+
+	public function testCanValidateValidVatNumberWithRequesterVatNumberSet()
+	{
+		$result = new stdClass();
+		$result->valid = true;
+		$result->countryCode = 'DE';
+		$result->vatNumber = '190098891';
+		$result->requestIdentifier = 'FOOBAR338';
+
+		$vatCheck = $this->getMockFromWsdl(__DIR__ . '/checkVatService.wsdl', 'VatService');
+		$vatCheck->expects($this->any())
+			->method('checkVatApprox')
+			->with([
+				'countryCode' => 'DE',
+				'vatNumber' => '190098891',
+				'requesterCountryCode' => 'CZ',
+				'requesterVatNumber' => '00006947',
+			])
+			->willReturn($result);
+
+		$vatNumber = 'DE 190 098 891';
+		$vatCalculator = new VatCalculator();
+		$vatCalculator->setSoapClient($vatCheck);
+		$result = $vatCalculator->getVatDetails($vatNumber, 'CZ00006947');
+		$this->assertTrue($result->isValid());
+		$this->assertSame('DE', $result->getCountryCode());
+		$this->assertSame('190098891', $result->getVatNumber());
+		$this->assertSame('FOOBAR338', $result->getRequestId());
 	}
 
 
