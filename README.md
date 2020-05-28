@@ -33,7 +33,6 @@ $vatCalculator->isValidVatNumber('NL123456789B01');
 	- [Validate EU VAT numbers](#validate-eu-vat-numbers)
 	- [Get EU VAT number details](#vat-number-details)
 	- [Get the IP based country of your user](#get-ip-based-country)
-- [Changelog](#changelog)
 - [License](#license)
 
 <a name="installation"></a>
@@ -152,10 +151,6 @@ $countryCode = $vatCalculator->getIpBasedCountry();
 ```
 
 The `$countryCode` will either be `false`, if the service is unavailable, or the country couldn't be looked up. Otherwise the variable contains the two-letter country code, which can be used to prefill the user selection.
-
-<a name="changelog"></a>
-## Changelog
-Please see [CHANGELOG](CHANGELOG.md) for more information.
 
 
 <a name="license"></a>

@@ -1,3 +1,11 @@
+# Upgrading from 2.* to 3.*
+
+* Version 3 doesn't support Laravel/Cashier anymore (**BC BREAK**).
+* The namespace has been changed for this fork from `Mpociot\VatCalculator` to `Spaze\VatCalculator` (**BC BREAK**)
+* Some methods have been properly *camelCased*: methods like `getClientIP()` -> `getClientIp()` and `shouldCollectVAT` -> `shouldCollectVat` and a few more
+* `VATCheckUnavailableException` has been *camelCased* to `VatCheckUnavailableException`
+* Requires PHP 7.3
+
 # Upgrading from 1.* to 2.*
 
 Version 2 of the VAT Calculator provides a new method to get a more precise VAT rate result.
