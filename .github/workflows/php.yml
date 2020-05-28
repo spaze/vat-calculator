@@ -1,0 +1,28 @@
+name: PHP Tests
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: OS info
+      run: cat /etc/os-release
+
+    - name: PHP info
+      run: |
+        php -v
+        php -m
+
+    - name: Install dependencies
+      run: composer install --no-progress --no-interaction
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --no-interaction
+
+    - name: Run tests
+      run: composer test-prod

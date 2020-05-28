@@ -29,6 +29,15 @@
 	},
 	"minimum-stability": "stable",
 	"scripts": {
-		"test": "vendor/phpunit/phpunit/phpunit"
+		"phpunit-dev": "php vendor/phpunit/phpunit/phpunit --colors=always --verbose",
+		"phpunit-prod-7.3": "php7.3 vendor/phpunit/phpunit/phpunit --colors=always --verbose",
+		"phpunit-prod-7.4": "php7.4 vendor/phpunit/phpunit/phpunit --colors=always --verbose",
+		"test": [
+			"@phpunit-dev"
+		],
+		"test-prod": [
+			"@phpunit-prod-7.3",
+			"@phpunit-prod-7.4"
+		]
 	}
 }
