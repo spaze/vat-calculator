@@ -111,16 +111,6 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testGetTaxRateForCountry()
-	{
-		$countryCode = 'DE';
-
-		$vatCalculator = new VatCalculator();
-		$result = $vatCalculator->getTaxRateForCountry($countryCode);
-		$this->assertEquals(0.19, $result);
-	}
-
-
 	public function testGetTaxRateForLocationWithCountryAndCompany()
 	{
 		$countryCode = 'DE';
@@ -128,17 +118,6 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 
 		$vatCalculator = new VatCalculator();
 		$result = $vatCalculator->getTaxRateForLocation($countryCode, null, $company);
-		$this->assertEquals(0, $result);
-	}
-
-
-	public function testGetTaxRateForCountryAndCompany()
-	{
-		$countryCode = 'DE';
-		$company = true;
-
-		$vatCalculator = new VatCalculator();
-		$result = $vatCalculator->getTaxRateForCountry($countryCode, $company);
 		$this->assertEquals(0, $result);
 	}
 
