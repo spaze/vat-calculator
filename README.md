@@ -34,6 +34,7 @@ $vatCalculator->isValidVatNumber('NL123456789B01');
 	- [Validate EU VAT numbers](#validate-eu-vat-numbers)
 	- [Get EU VAT number details](#vat-number-details)
 	- [Get the IP based country of your user](#get-ip-based-country)
+	- [Countries](#countries)
 - [License](#license)
 
 <a name="installation"></a>
@@ -141,6 +142,17 @@ try {
 } catch( VatCheckUnavailableException $e ){
 	// Please handle me
 }
+```
+
+<a name="countries"></a>
+## Countries
+
+EU countries are supported as well as some non-EU countries that use VAT. Some countries are not supported even though they also have VAT. Currently, that's the case for Norway which can be added manually with `VatRates::addRateForCountry()`.
+
+```php
+$vatRates = new VatRates();
+$vatRates->addRateForCountry('NO');
+$vatCalculator = new VatCalculator($vatRates);
 ```
 
 <a name="license"></a>

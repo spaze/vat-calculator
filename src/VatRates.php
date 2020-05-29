@@ -176,6 +176,16 @@ class VatRates
 		'TR' => [ // Turkey
 			'rate' => 0.18,
 		],
+	];
+
+	/**
+	 * Optional tax rules.
+	 *
+	 * These are added manually by `addRateForCountry()`
+	 *
+	 * @var array<string, array>
+	 */
+	private $optionalTaxRules = [
 		'NO' => [ // Norway
 			'rate' => 0.25,
 		],
@@ -330,6 +340,13 @@ class VatRates
 			],
 		],
 	];
+
+
+	public function addRateForCountry(string $country): void
+	{
+		$country = strtoupper($country);
+		$this->taxRules[$country] = $this->optionalTaxRules[$country] ?? null;
+	}
 
 
 	public function shouldCollectVat(string $countryCode): bool

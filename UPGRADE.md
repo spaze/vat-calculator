@@ -5,6 +5,7 @@
 * Exceptions (`VatCheckUnavailableException`) are always thrown, `forwardSoapFaults` option has been removed (**BC BREAK**)
 * Some countries have various VAT rates depending on location resulting in `getTaxRateForCountry()` removal, use `getTaxRateForLocation()` instead (**BC BREAK**)
 * Rates have been moved to a separate class `VatRates`, you need to pass the class to `VatCalculator` constructor  (**BC BREAK**)
+* Norway VAT rate removed, can be manually added back with `VatRates::addRateForCountry()`
 * `getIPBasedCountry()` & `getClientIP()` methods have been removed, use some other package (or `CF-IPCountry` HTTP header if you're behind Cloudflare)
 * Some methods have been properly *camelCased*: methods like `getClientIP()` -> `getClientIp()` and `shouldCollectVAT` -> `shouldCollectVat` and a few more
 * `VATCheckUnavailableException` has been *camelCased* to `VatCheckUnavailableException`
