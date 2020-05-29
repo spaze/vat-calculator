@@ -21,7 +21,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	{
 		$net = 25.00;
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$result = $vatCalculator->calculate($net);
 		$this->assertEquals(25.00, $result);
 	}
@@ -32,7 +32,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$net = 24.00;
 		$countryCode = 'DE';
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$result = $vatCalculator->calculate($net, $countryCode);
 		$this->assertEquals(28.56, $result);
 		$this->assertEquals(0.19, $vatCalculator->getTaxRate());
@@ -45,7 +45,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$net = 24.00;
 		$countryCode = 'DE';
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$vatCalculator->setCountryCode($countryCode);
 		$result = $vatCalculator->calculate($net);
 		$this->assertEquals(28.56, $result);
@@ -61,7 +61,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$postalCode = null;
 		$company = true;
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$result = $vatCalculator->calculate($net, $countryCode, $postalCode, $company);
 		$this->assertEquals(24.00, $result);
 		$this->assertEquals(0, $vatCalculator->getTaxRate());
@@ -75,7 +75,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$countryCode = 'DE';
 		$company = true;
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$vatCalculator->setCompany($company);
 		$result = $vatCalculator->calculate($net, $countryCode);
 		$this->assertEquals(24.00, $result);
@@ -91,7 +91,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$countryCode = 'DE';
 		$company = true;
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$vatCalculator->setCountryCode($countryCode);
 		$vatCalculator->setCompany($company);
 		$result = $vatCalculator->calculate($net);
@@ -105,7 +105,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	{
 		$countryCode = 'DE';
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$result = $vatCalculator->getTaxRateForLocation($countryCode);
 		$this->assertEquals(0.19, $result);
 	}
@@ -116,7 +116,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$countryCode = 'DE';
 		$company = true;
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$result = $vatCalculator->getTaxRateForLocation($countryCode, null, $company);
 		$this->assertEquals(0, $result);
 	}
@@ -142,7 +142,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 			->willReturn($result);
 
 		$vatNumber = 'DE 190 098 891';
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$vatCalculator->setSoapClient($vatCheck);
 		$result = $vatCalculator->isValidVatNumber($vatNumber);
 		$this->assertTrue($result);
@@ -169,7 +169,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 			->willReturn($result);
 
 		$vatNumber = 'SomeInvalidNumber';
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$vatCalculator->setSoapClient($vatCheck);
 		$result = $vatCalculator->isValidVatNumber($vatNumber);
 		$this->assertFalse($result);
@@ -191,7 +191,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 			->willThrowException(new SoapFault('Server', 'Something went wrong'));
 
 		$vatNumber = 'SomeInvalidNumber';
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$vatCalculator->setSoapClient($vatCheck);
 		$vatCalculator->isValidVatNumber($vatNumber);
 	}
@@ -217,7 +217,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 			->willReturn($result);
 
 		$vatNumber = 'DE 190 098 891';
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$vatCalculator->setBusinessVatNumber('CZ26168685');
 		$vatCalculator->setSoapClient($vatCheck);
 		$result = $vatCalculator->getVatDetails($vatNumber);
@@ -248,7 +248,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 			->willReturn($result);
 
 		$vatNumber = 'DE 190 098 891';
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$vatCalculator->setSoapClient($vatCheck);
 		$result = $vatCalculator->getVatDetails($vatNumber, 'CZ00006947');
 		$this->assertTrue($result->isValid());
@@ -262,7 +262,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	{
 		$this->setExpectedException(\Spaze\VatCalculator\Exceptions\VatCheckUnavailableException::class);
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$vatNumber = 'SomeInvalidNumber';
 		$vatCalculator->isValidVatNumber($vatNumber);
 	}
@@ -273,7 +273,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$net = 24.00;
 		$countryCode = 'DE';
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$vatCalculator->setBusinessCountryCode('DE');
 		$result = $vatCalculator->calculate($net, $countryCode, null, true);
 		$this->assertEquals(28.56, $result);
@@ -287,7 +287,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$net = 24.00;
 		$countryCode = 'DE';
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$vatCalculator->setBusinessCountryCode('NL');
 		$result = $vatCalculator->calculate($net, $countryCode, null, true);
 		$this->assertEquals(24.00, $result);
@@ -301,7 +301,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$net = 24.00;
 		$countryCode = 'XXX';
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$result = $vatCalculator->calculate($net, $countryCode, null, true);
 		$this->assertEquals(24.00, $result);
 		$this->assertEquals(0.00, $vatCalculator->getTaxRate());
@@ -312,7 +312,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	public function testChecksPostalCodeForVatExceptions()
 	{
 		$net = 24.00;
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$postalCode = '27498'; // Heligoland
 		$result = $vatCalculator->calculate($net, 'DE', $postalCode, false);
 		$this->assertEquals(24.00, $result);
@@ -342,7 +342,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	public function testPostalCodesWithoutExceptionsGetStandardRate()
 	{
 		$net = 24.00;
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 
 		// Invalid post code
 		$postalCode = 'IGHJ987ERT35';
@@ -364,7 +364,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 
 	public function testShouldCollectVat()
 	{
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$this->assertTrue($vatCalculator->shouldCollectVat('DE'));
 		$this->assertTrue($vatCalculator->shouldCollectVat('NL'));
 		$this->assertFalse($vatCalculator->shouldCollectVat(''));
@@ -376,7 +376,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	{
 		$gross = 25.00;
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$result = $vatCalculator->calculateNet($gross);
 		$this->assertEquals(25.00, $result);
 	}
@@ -387,7 +387,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$gross = 28.56;
 		$countryCode = 'DE';
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$result = $vatCalculator->calculateNet($gross, $countryCode);
 		$this->assertEquals(24.00, $result);
 		$this->assertEquals(0.19, $vatCalculator->getTaxRate());
@@ -400,7 +400,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$gross = 28.56;
 		$countryCode = 'DE';
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$vatCalculator->setCountryCode($countryCode);
 
 		$result = $vatCalculator->calculateNet($gross);
@@ -417,7 +417,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$postalCode = null;
 		$company = true;
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$result = $vatCalculator->calculateNet($gross, $countryCode, $postalCode, $company);
 		$this->assertEquals(28.56, $result);
 		$this->assertEquals(0, $vatCalculator->getTaxRate());
@@ -431,7 +431,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$countryCode = 'DE';
 		$company = true;
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$vatCalculator->setCompany($company);
 		$result = $vatCalculator->calculateNet($gross, $countryCode);
 		$this->assertEquals(24.00, $result);
@@ -447,7 +447,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$countryCode = 'DE';
 		$company = true;
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$vatCalculator->setCountryCode($countryCode);
 		$vatCalculator->setCompany($company);
 		$result = $vatCalculator->calculateNet($gross);
@@ -465,7 +465,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$type = 'high';
 		$postalCode = null;
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$result = $vatCalculator->calculate($gross, $countryCode, $postalCode, $company, $type);
 
 		$this->assertEquals(29.04, $result);
@@ -480,7 +480,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$type = 'low';
 		$postalCode = null;
 
-		$vatCalculator = new VatCalculator();
+		$vatCalculator = new VatCalculator(new VatRates());
 		$result = $vatCalculator->calculate($gross, $countryCode, $postalCode, $company, $type);
 
 		$this->assertEquals(26.16, $result);

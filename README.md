@@ -14,7 +14,8 @@ Handle all the hard stuff related to EU MOSS tax/vat regulations, the way it sho
 // Easy to use!
 use Spaze\VatCalculator\VatCalculator;
 
-$vatCalculator = new VatCalculator();
+$vatRates = new VatRates();
+$vatCalculator = new VatCalculator($vatRates);
 $countryCode = $vatCalculator->getIpBasedCountry();
 $vatCalculator->calculate( 24.00, $countryCode );
 $vatCalculator->calculate( 24.00, $countryCode, $postalCode );
@@ -54,7 +55,8 @@ Example:
 ```php
 use Spaze\VatCalculator\VatCalculator;
 
-$vatCalculator = new VatCalculator();
+$vatRates = new VatRates();
+$vatCalculator = new VatCalculator($vatRates);
 $vatCalculator->setBusinessCountryCode('DE');
 $countryCode = $vatCalculator->getIpBasedCountry();
 $grossPrice = $vatCalculator->calculate( 49.99, 'LU' );
