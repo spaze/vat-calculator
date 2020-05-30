@@ -32,6 +32,7 @@ $vatCalculator->isValidVatNumber('NL123456789B01');
 	- [Get the IP based country of your user](#get-ip-based-country)
 	- [Countries](#countries)
 - [License](#license)
+- [Contributing](#contributing)
 
 <a name="installation"></a>
 ## Installation
@@ -154,3 +155,7 @@ $vatCalculator = new VatCalculator($vatRates);
 <a name="license"></a>
 ## License
 This library is licensed under the MIT license. Please see [License file](LICENSE.md) for more information.
+
+<a name="contributing"></a>
+## Contributing
+Run PHPUnit tests with `composer test`, see `scripts` in `composer.json`. Tests are also run on GitHub with Actions on each push.
