@@ -147,6 +147,8 @@ $vatRates->addRateForCountry('NO');
 $vatCalculator = new VatCalculator($vatRates);
 ```
 
+Please keep in mind that with countries like Norway you cannot validate VAT ids with `isValidVatNumber()` because it uses VIES, the EU VAT number validation service, and as Norway is not in the EU, it will always come back as invalid.
+
 <a name="license"></a>
 ## License
 This library is licensed under the MIT license. Please see [License file](LICENSE.md) for more information.
