@@ -22,10 +22,10 @@ class VatRatesTest extends PHPUnit_Framework_TestCase
 	{
 		$country = 'nO';
 		$this->assertFalse($this->vatRates->shouldCollectVat($country));
-		$this->assertEquals(0, $this->vatRates->getTaxRateForLocation($country));
+		$this->assertEquals(0, $this->vatRates->getTaxRateForLocation($country, null));
 		$this->vatRates->addRateForCountry($country);
 		$this->assertTrue($this->vatRates->shouldCollectVat($country));
-		$this->assertEquals(0.25, $this->vatRates->getTaxRateForLocation($country));
+		$this->assertEquals(0.25, $this->vatRates->getTaxRateForLocation($country, null));
 	}
 
 
@@ -33,10 +33,10 @@ class VatRatesTest extends PHPUnit_Framework_TestCase
 	{
 		$country = 'yEs';
 		$this->assertFalse($this->vatRates->shouldCollectVat($country));
-		$this->assertEquals(0, $this->vatRates->getTaxRateForLocation($country));
+		$this->assertEquals(0, $this->vatRates->getTaxRateForLocation($country, null));
 		$this->vatRates->addRateForCountry($country);
 		$this->assertFalse($this->vatRates->shouldCollectVat($country));
-		$this->assertEquals(0, $this->vatRates->getTaxRateForLocation($country));
+		$this->assertEquals(0, $this->vatRates->getTaxRateForLocation($country, null));
 	}
 
 }

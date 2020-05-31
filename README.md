@@ -12,11 +12,8 @@ use Spaze\VatCalculator\VatCalculator;
 
 $vatRates = new VatRates();
 $vatCalculator = new VatCalculator($vatRates);
-$countryCode = $vatCalculator->getIpBasedCountry();
-$vatCalculator->calculate( 24.00, $countryCode );
-$vatCalculator->calculate( 24.00, $countryCode, $postalCode );
-$vatCalculator->calculate( 71.00, 'DE', '41352', $isCompany = true );
-$vatCalculator->getTaxRateForLocation( 'NL' );
+$vatCalculator->calculate(71.00, 'DE' /* $countryCode */, '41352' /* $postalCode or null */,  true /* Whether the customer you're calculating the VAT for is a company */);
+$vatCalculator->getTaxRateForLocation('NL');
 // Check validity of a VAT number
 $vatCalculator->isValidVatNumber('NL123456789B01');
 ```
@@ -26,7 +23,6 @@ $vatCalculator->isValidVatNumber('NL123456789B01');
 	- [Standalone](#installation-standalone)
 - [Usage](#usage)
 	- [Calculate the gross price](#calculate-the-gross-price)
-	- [Receive more information](#receive-more-information)
 	- [Validate EU VAT numbers](#validate-eu-vat-numbers)
 	- [Get EU VAT number details](#vat-number-details)
 	- [Get the IP based country of your user](#get-ip-based-country)
@@ -55,37 +51,36 @@ use Spaze\VatCalculator\VatCalculator;
 
 $vatRates = new VatRates();
 $vatCalculator = new VatCalculator($vatRates);
-$vatCalculator->setBusinessCountryCode('DE');
-$countryCode = $vatCalculator->getIpBasedCountry();
-$grossPrice = $vatCalculator->calculate( 49.99, 'LU' );
+$vatCalculator->setBusinessCountryCode('DE');  // Where your company is based in
+$price = $vatCalculator->calculate(49.99, 'LU', null, false);
+$price->getPrice();
+$price->getNetPrice();
+$price->getTaxValue();
+$price->getTaxRate();
 ```
 
 <a name="usage"></a>
 ## Usage
 <a name="calculate-the-gross-price"></a>
 ### Calculate the gross price
-To calculate the gross price use the `calculate` method with a net price and a country code as paremeters.
+To calculate the gross price (price with VAT added) use the `calculate` method with a net price, a country code, a postal code (null if unknow) and whether you're calculating VAT for a customer that's a company as paremeters.
 
 ```php
-$grossPrice = $vatCalculator->calculate( 24.00, 'DE' );
+$grossPrice = $vatCalculator->calculate(24.00, 'DE', null, false);
 ```
-The third parameter is the postal code of the customer.
+The third parameter is the postal code of the customer, pass `null` if unknown.
 
 As a fourth parameter, you can pass in a boolean indicating whether the customer is a company or a private person. If the customer is a company, which you should check by <a href="#validate-eu-vat-numbers">validating the VAT number</a>, the net price gets returned.
 
+Fifth parameter defines which VAT rate to use if there are more defined for the particular country (`VatRates::HIGH`, `VatRates::LOW`, `VatRates::GENERAL` is the default when just one rate is defined).
 
+Returns `VatPrice` object:
 ```php
-$grossPrice = $vatCalculator->calculate( 24.00, 'DE', '12345', $isCompany = true );
-```
-<a name="receive-more-information"></a>
-### Receive more information
-After calculating the gross price you can extract more information from the VatCalculator.
+$grossPrice->getPrice();
+$grossPrice->getNetPrice();
+$grossPrice->getTaxValue();
+$grossPrice->getTaxRate();
 
-```php
-$grossPrice = $vatCalculator->calculate( 24.00, 'DE' ); // 28.56
-$taxRate    = $vatCalculator->getTaxRate(); // 0.19
-$netPrice   = $vatCalculator->getNetPrice(); // 24.00
-$taxValue   = $vatCalculator->getTaxValue(); // 4.56
 ```
 
 <a name="validate-eu-vat-numbers"></a>
@@ -109,7 +104,7 @@ This service relies on a third party SOAP API provided by the EU. If, for whatev
 ```php
 try {
 	$validVat = $vatCalculator->isValidVatNumber('NL 123456789 B01');
-} catch( VatCheckUnavailableException $e ){
+} catch (VatCheckUnavailableException $e) {
 	// Please handle me
 }
 ```
@@ -136,7 +131,7 @@ try {
 		[requestId:VatDetails:private] => FOOBAR338
 	)
 	*/
-} catch( VatCheckUnavailableException $e ){
+} catch (VatCheckUnavailableException $e) {
 	// Please handle me
 }
 ```

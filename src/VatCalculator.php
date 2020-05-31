@@ -23,24 +23,6 @@ class VatCalculator
 	/** @var VatRates */
 	private $vatRates;
 
-	/** @var float */
-	private $netPrice = 0.0;
-
-	/** @var string */
-	private $countryCode;
-
-	/** @var string */
-	private $postalCode;
-
-	/** @var float */
-	private $taxValue = 0;
-
-	/** @var float */
-	private $taxRate = 0;
-
-	/** @var bool */
-	private $company = false;
-
 	/** @var string */
 	private $businessCountryCode;
 
@@ -65,27 +47,17 @@ class VatCalculator
 	 * customer is a company or not.
 	 *
 	 * @param float $netPrice
-	 * @param string|null $countryCode
+	 * @param string $countryCode
 	 * @param string|null $postalCode
-	 * @param bool|null $company
-	 * @param string|null $type
-	 * @return float
+	 * @param bool $company
+	 * @param string $type
+	 * @return VatPrice
 	 */
-	public function calculate(float $netPrice, ?string $countryCode = null, ?string $postalCode = null, ?bool $company = null, ?string $type = VatRates::GENERAL): float
+	public function calculate(float $netPrice, string $countryCode, ?string $postalCode, bool $company, string $type = VatRates::GENERAL): VatPrice
 	{
-		if ($countryCode) {
-			$this->setCountryCode($countryCode);
-		}
-		if ($postalCode) {
-			$this->setPostalCode($postalCode);
-		}
-		if (!is_null($company) && $company !== $this->isCompany()) {
-			$this->setCompany($company);
-		}
-		$this->netPrice = floatval($netPrice);
-		$this->taxRate = $this->getCountryCode() === null ? 0 : $this->getTaxRateForLocation($this->getCountryCode(), $this->getPostalCode(), $this->isCompany(), $type);
-		$this->taxValue = $this->taxRate * $this->netPrice;
-		return $this->netPrice + $this->taxValue;
+		$taxRate = $this->getTaxRateForLocation($countryCode, $postalCode, $company, $type);
+		$taxValue = $taxRate * $netPrice;
+		return new VatPrice($netPrice, $netPrice + $taxValue, $taxValue, $taxRate);
 	}
 
 
@@ -94,78 +66,17 @@ class VatCalculator
 	 * customer is a company or not.
 	 *
 	 * @param float $gross
-	 * @param string|null $countryCode
+	 * @param string $countryCode
 	 * @param string|null $postalCode
-	 * @param bool|null $company
-	 * @param string|null $type
-	 * @return float
+	 * @param bool $company
+	 * @param string $type
+	 * @return VatPrice
 	 */
-	public function calculateNet(float $gross, ?string $countryCode = null, ?string $postalCode = null, ?bool $company = null, ?string $type = VatRates::GENERAL): float
+	public function calculateNet(float $gross, string $countryCode, ?string $postalCode, bool $company, string $type = VatRates::GENERAL): VatPrice
 	{
-		if ($countryCode) {
-			$this->setCountryCode($countryCode);
-		}
-		if ($postalCode) {
-			$this->setPostalCode($postalCode);
-		}
-		if (!is_null($company) && $company !== $this->isCompany()) {
-			$this->setCompany($company);
-		}
-
-		$value = floatval($gross);
-		$this->taxRate = $this->getCountryCode() === null ? 0 : $this->getTaxRateForLocation($this->getCountryCode(), $this->getPostalCode(), $this->isCompany(), $type);
-		$this->taxValue = $this->taxRate > 0 ? $value / (1 + $this->taxRate) * $this->taxRate : 0;
-		$this->netPrice = $value - $this->taxValue;
-
-		return $this->netPrice;
-	}
-
-
-	public function getNetPrice(): float
-	{
-		return $this->netPrice;
-	}
-
-
-	public function getCountryCode(): ?string
-	{
-		return $this->countryCode ? strtoupper($this->countryCode) : null;
-	}
-
-
-	public function setCountryCode(string $countryCode): void
-	{
-		$this->countryCode = $countryCode;
-	}
-
-
-	public function getPostalCode(): ?string
-	{
-		return $this->postalCode;
-	}
-
-
-	public function setPostalCode(string $postalCode): void
-	{
-		$this->postalCode = $postalCode;
-	}
-
-
-	public function getTaxRate(): float
-	{
-		return $this->taxRate;
-	}
-
-
-	public function isCompany(): bool
-	{
-		return $this->company;
-	}
-
-
-	public function setCompany(bool $company): void
-	{
-		$this->company = $company;
+		$taxRate = $this->getTaxRateForLocation($countryCode, $postalCode, $company, $type);
+		$taxValue = $taxRate > 0 ? $gross / (1 + $taxRate) * $taxRate : 0;
+		return new VatPrice($gross - $taxValue, $gross, $taxValue, $taxRate);
 	}
 
 
@@ -192,19 +103,13 @@ class VatCalculator
 	 * @param string|null $type
 	 * @return float
 	 */
-	public function getTaxRateForLocation(string $countryCode, ?string $postalCode = null, bool $company = false, ?string $type = null): float
+	public function getTaxRateForLocation(string $countryCode, ?string $postalCode, bool $company, ?string $type = null): float
 	{
 		if ($company && strtoupper($countryCode) !== $this->businessCountryCode) {
 			return 0;
 		}
 
 		return $this->vatRates->getTaxRateForLocation($countryCode, $postalCode, $type);
-	}
-
-
-	public function getTaxValue(): float
-	{
-		return $this->taxValue;
 	}
 
 

@@ -365,7 +365,7 @@ class VatRates
 	 * @param string|null $type
 	 * @return float
 	 */
-	public function getTaxRateForLocation(string $countryCode, ?string $postalCode = null, ?string $type = self::GENERAL): float
+	public function getTaxRateForLocation(string $countryCode, ?string $postalCode, ?string $type = self::GENERAL): float
 	{
 		if (isset($this->postalCodeExceptions[$countryCode]) && $postalCode !== null) {
 			foreach ($this->postalCodeExceptions[$countryCode] as $postalCodeException) {
@@ -380,7 +380,7 @@ class VatRates
 			}
 		}
 
-		if ($type !== null) {
+		if ($type !== VatRates::GENERAL) {
 			return isset($this->taxRules[strtoupper($countryCode)]['rates'][$type]) ? $this->taxRules[strtoupper($countryCode)]['rates'][$type] : 0;
 		}
 
