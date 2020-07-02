@@ -46,6 +46,14 @@ class VatRates
 		],
 		'DE' => [ // Germany
 			'rate' => 0.19,
+			'since' => [
+				'2021-01-01 00:00:00 Europe/Berlin' => [
+					'rate' => 0.19,
+				],
+				'2020-07-01 00:00:00 Europe/Berlin' => [
+					'rate' => 0.16,
+				],
+			],
 			'exceptions' => [
 				'Heligoland' => 0,
 				'Büsingen am Hochrhein' => 0,
@@ -342,6 +350,16 @@ class VatRates
 	];
 
 
+	/** @var integer */
+	private $now;
+
+
+	public function __construct()
+	{
+		$this->now = time();
+	}
+
+
 	public function addRateForCountry(string $country): void
 	{
 		$country = strtoupper($country);
@@ -367,6 +385,7 @@ class VatRates
 	 */
 	public function getTaxRateForLocation(string $countryCode, ?string $postalCode, ?string $type = self::GENERAL): float
 	{
+		$countryCode = strtoupper($countryCode);
 		if (isset($this->postalCodeExceptions[$countryCode]) && $postalCode !== null) {
 			foreach ($this->postalCodeExceptions[$countryCode] as $postalCodeException) {
 				if (!preg_match($postalCodeException['postalCode'], $postalCode)) {
@@ -375,16 +394,31 @@ class VatRates
 				if (isset($postalCodeException['name'])) {
 					return $this->taxRules[$postalCodeException['code']]['exceptions'][$postalCodeException['name']];
 				}
-
-				return $this->taxRules[$postalCodeException['code']]['rate'];
+				return $this->getRules($postalCodeException['code'])['rate'];
 			}
 		}
 
 		if ($type !== VatRates::GENERAL) {
-			return isset($this->taxRules[strtoupper($countryCode)]['rates'][$type]) ? $this->taxRules[strtoupper($countryCode)]['rates'][$type] : 0;
+			return isset($this->taxRules[$countryCode]['rates'][$type]) ? $this->taxRules[$countryCode]['rates'][$type] : 0;
 		}
 
-		return isset($this->taxRules[strtoupper($countryCode)]['rate']) ? $this->taxRules[strtoupper($countryCode)]['rate'] : 0;
+		return $this->getRules($countryCode)['rate'];
+	}
+
+
+	private function getRules(string $countryCode): array
+	{
+		if (!isset($this->taxRules[$countryCode])) {
+			return ['rate' => 0];
+		}
+		if (isset($this->taxRules[$countryCode]['since'])) {
+			foreach ($this->taxRules[$countryCode]['since'] as $since => $rates) {
+				if (strtotime($since) <= $this->now) {
+					return $rates;
+				}
+			}
+		}
+		return $this->taxRules[$countryCode];
 	}
 
 }

@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Spaze\VatCalculator;
 
 use PHPUnit_Framework_TestCase;
+use ReflectionClass;
 
 class VatRatesTest extends PHPUnit_Framework_TestCase
 {
@@ -37,6 +38,23 @@ class VatRatesTest extends PHPUnit_Framework_TestCase
 		$this->vatRates->addRateForCountry($country);
 		$this->assertFalse($this->vatRates->shouldCollectVat($country));
 		$this->assertEquals(0, $this->vatRates->getTaxRateForLocation($country, null));
+	}
+
+
+	public function testGetRatesSince(): void
+	{
+		$class = new ReflectionClass($this->vatRates);
+		$property = $class->getProperty('now');
+		$property->setAccessible(true);
+
+		$property->setValue($this->vatRates, strtotime('2020-06-30 23:59:59 Europe/Berlin'));
+		$this->assertEquals(0.19, $this->vatRates->getTaxRateForLocation('DE', null));
+
+		$property->setValue($this->vatRates, strtotime('2020-07-01 00:00:00 Europe/Berlin'));
+		$this->assertEquals(0.16, $this->vatRates->getTaxRateForLocation('DE', null));
+
+		$property->setValue($this->vatRates, strtotime('2021-01-01 00:00:00 Europe/Berlin'));
+		$this->assertEquals(0.19, $this->vatRates->getTaxRateForLocation('DE', null));
 	}
 
 }
