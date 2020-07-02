@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Spaze\VatCalculator;
 
 use PHPUnit_Framework_TestCase;
+use ReflectionClass;
 use SoapClient;
 use SoapFault;
 use Spaze\VatCalculator\Exceptions\VatCheckUnavailableException;
@@ -18,11 +19,20 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	/** @var SoapClient */
 	private $vatCheck;
 
+	/** @var VatRates */
+	private $vatRates;
+
 
 	protected function setUp()
 	{
-		$this->vatCalculator = new VatCalculator(new VatRates());
+		$this->vatRates = new VatRates();
+		$this->vatCalculator = new VatCalculator($this->vatRates);
 		$this->vatCheck = $this->getMockFromWsdl(__DIR__ . '/checkVatService.wsdl', 'VatService');
+
+		$class = new ReflectionClass($this->vatRates);
+		$property = $class->getProperty('now');
+		$property->setAccessible(true);
+		$property->setValue($this->vatRates, strtotime('2020-06-30 23:59:59 Europe/Berlin'));
 	}
 
 
