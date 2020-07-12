@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Spaze\VatCalculator;
 
+use DateTimeImmutable;
 use PHPUnit_Framework_TestCase;
 use ReflectionClass;
 
@@ -47,14 +48,20 @@ class VatRatesTest extends PHPUnit_Framework_TestCase
 		$property = $class->getProperty('now');
 		$property->setAccessible(true);
 
-		$property->setValue($this->vatRates, strtotime('2020-06-30 23:59:59 Europe/Berlin'));
+		$date = '2020-06-30 23:59:59 Europe/Berlin';
+		$property->setValue($this->vatRates, new DateTimeImmutable($date));
 		$this->assertEquals(0.19, $this->vatRates->getTaxRateForLocation('DE', null));
+		$this->assertEquals(0.19, $this->vatRates->getTaxRateForLocation('DE', null, VatRates::GENERAL, new DateTimeImmutable($date)));
 
-		$property->setValue($this->vatRates, strtotime('2020-07-01 00:00:00 Europe/Berlin'));
+		$date = '2020-07-01 00:00:00 Europe/Berlin';
+		$property->setValue($this->vatRates, new DateTimeImmutable($date));
 		$this->assertEquals(0.16, $this->vatRates->getTaxRateForLocation('DE', null));
+		$this->assertEquals(0.16, $this->vatRates->getTaxRateForLocation('DE', null, VatRates::GENERAL, new DateTimeImmutable($date)));
 
-		$property->setValue($this->vatRates, strtotime('2021-01-01 00:00:00 Europe/Berlin'));
+		$date = '2021-01-01 00:00:00 Europe/Berlin';
+		$property->setValue($this->vatRates, new DateTimeImmutable($date));
 		$this->assertEquals(0.19, $this->vatRates->getTaxRateForLocation('DE', null));
+		$this->assertEquals(0.19, $this->vatRates->getTaxRateForLocation('DE', null, VatRates::GENERAL, new DateTimeImmutable($date)));
 	}
 
 }

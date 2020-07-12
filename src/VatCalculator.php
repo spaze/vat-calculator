@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Spaze\VatCalculator;
 
+use DateTimeInterface;
 use Spaze\VatCalculator\Exceptions\VatCheckUnavailableException;
 use SoapClient;
 use SoapFault;
@@ -44,18 +45,19 @@ class VatCalculator
 
 	/**
 	 * Calculate the VAT based on the net price, country code and indication if the
-	 * customer is a company or not.
+	 * customer is a company or not. Specify a date to use VAT rate valid for that date.
 	 *
 	 * @param float $netPrice
 	 * @param string $countryCode
 	 * @param string|null $postalCode
 	 * @param bool $company
-	 * @param string $type
+	 * @param string|null $type
+	 * @param DateTimeInterface|null $date Date to use the VAT rate for, null for current date
 	 * @return VatPrice
 	 */
-	public function calculate(float $netPrice, string $countryCode, ?string $postalCode, bool $company, string $type = VatRates::GENERAL): VatPrice
+	public function calculate(float $netPrice, string $countryCode, ?string $postalCode, bool $company, ?string $type = VatRates::GENERAL, ?DateTimeInterface $date = null): VatPrice
 	{
-		$taxRate = $this->getTaxRateForLocation($countryCode, $postalCode, $company, $type);
+		$taxRate = $this->getTaxRateForLocation($countryCode, $postalCode, $company, $type, $date);
 		$taxValue = $taxRate * $netPrice;
 		return new VatPrice($netPrice, $netPrice + $taxValue, $taxValue, $taxRate);
 	}
@@ -63,18 +65,19 @@ class VatCalculator
 
 	/**
 	 * Calculate the net price on the gross price, country code and indication if the
-	 * customer is a company or not.
+	 * customer is a company or not. Specify a date to use VAT rate valid for that date.
 	 *
 	 * @param float $gross
 	 * @param string $countryCode
 	 * @param string|null $postalCode
 	 * @param bool $company
-	 * @param string $type
+	 * @param string|null $type
+	 * @param DateTimeInterface|null $date Date to use the VAT rate for, null for current date
 	 * @return VatPrice
 	 */
-	public function calculateNet(float $gross, string $countryCode, ?string $postalCode, bool $company, string $type = VatRates::GENERAL): VatPrice
+	public function calculateNet(float $gross, string $countryCode, ?string $postalCode, bool $company, ?string $type = VatRates::GENERAL, ?DateTimeInterface $date = null): VatPrice
 	{
-		$taxRate = $this->getTaxRateForLocation($countryCode, $postalCode, $company, $type);
+		$taxRate = $this->getTaxRateForLocation($countryCode, $postalCode, $company, $type, $date);
 		$taxValue = $taxRate > 0 ? $gross / (1 + $taxRate) * $taxRate : 0;
 		return new VatPrice($gross - $taxValue, $gross, $taxValue, $taxRate);
 	}
@@ -95,21 +98,22 @@ class VatCalculator
 	/**
 	 * Returns the tax rate for the given country code.
 	 * If a postal code is provided, it will try to lookup the different
-	 * postal code exceptions that are possible.
+	 * postal code exceptions that are possible. Specify a date to use VAT rate valid for that date.
 	 *
 	 * @param string $countryCode
 	 * @param string|null $postalCode
 	 * @param bool $company
 	 * @param string|null $type
+	 * @param DateTimeInterface|null $date Date to use the VAT rate for, null for current date
 	 * @return float
 	 */
-	public function getTaxRateForLocation(string $countryCode, ?string $postalCode, bool $company, ?string $type = null): float
+	public function getTaxRateForLocation(string $countryCode, ?string $postalCode, bool $company, ?string $type = null, ?DateTimeInterface $date = null): float
 	{
 		if ($company && strtoupper($countryCode) !== $this->businessCountryCode) {
 			return 0;
 		}
 
-		return $this->vatRates->getTaxRateForLocation($countryCode, $postalCode, $type);
+		return $this->vatRates->getTaxRateForLocation($countryCode, $postalCode, $type, $date);
 	}
 
 
