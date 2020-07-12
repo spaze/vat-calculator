@@ -66,13 +66,15 @@ $price->getTaxRate();
 To calculate the gross price (price with VAT added) use the `calculate` method with a net price, a country code, a postal code (null if unknow) and whether you're calculating VAT for a customer that's a company as paremeters.
 
 ```php
-$grossPrice = $vatCalculator->calculate(24.00, 'DE', null, false);
+$grossPrice = $vatCalculator->calculate(24.00, 'DE', null, false /* [, $rateType [, $dateTime]] */);
 ```
 The third parameter is the postal code of the customer, pass `null` if unknown.
 
 As a fourth parameter, you can pass in a boolean indicating whether the customer is a company or a private person. If the customer is a company, which you should check by <a href="#validate-eu-vat-numbers">validating the VAT number</a>, the net price gets returned.
 
-Fifth parameter defines which VAT rate to use if there are more defined for the particular country (`VatRates::HIGH`, `VatRates::LOW`, `VatRates::GENERAL` is the default when just one rate is defined).
+Fifth optional parameter defines which VAT rate to use if there are more defined for the particular country (`VatRates::HIGH`, `VatRates::LOW`, `VatRates::GENERAL` is the default when just one rate is defined).
+
+The sixth parameter, optional, specifies the date to use the VAT rate for. This is needed when a country changes its VAT rate and you want to calculate a price with the previous rate. Pass `DateTime` or `DateTimeImmutable` object. Current date used when not specified.
 
 Returns `VatPrice` object:
 ```php

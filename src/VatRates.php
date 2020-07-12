@@ -1,9 +1,10 @@
 <?php
 declare(strict_types = 1);
 
-
 namespace Spaze\VatCalculator;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 
 class VatRates
 {
@@ -350,13 +351,13 @@ class VatRates
 	];
 
 
-	/** @var integer */
+	/** @var DateTimeImmutable */
 	private $now;
 
 
 	public function __construct()
 	{
-		$this->now = time();
+		$this->now = new DateTimeImmutable();
 	}
 
 
@@ -376,14 +377,15 @@ class VatRates
 	/**
 	 * Returns the tax rate for the given country code.
 	 * If a postal code is provided, it will try to lookup the different
-	 * postal code exceptions that are possible.
+	 * postal code exceptions that are possible. Specify a date to use VAT rate valid for that date.
 	 *
 	 * @param string $countryCode
 	 * @param string|null $postalCode
 	 * @param string|null $type
+	 * @param DateTimeInterface|null $date Date to use the VAT rate for, null for current date
 	 * @return float
 	 */
-	public function getTaxRateForLocation(string $countryCode, ?string $postalCode, ?string $type = self::GENERAL): float
+	public function getTaxRateForLocation(string $countryCode, ?string $postalCode, ?string $type = self::GENERAL, ?DateTimeInterface $date = null): float
 	{
 		$countryCode = strtoupper($countryCode);
 		if (isset($this->postalCodeExceptions[$countryCode]) && $postalCode !== null) {
@@ -394,7 +396,7 @@ class VatRates
 				if (isset($postalCodeException['name'])) {
 					return $this->taxRules[$postalCodeException['code']]['exceptions'][$postalCodeException['name']];
 				}
-				return $this->getRules($postalCodeException['code'])['rate'];
+				return $this->getRules($postalCodeException['code'], $date)['rate'];
 			}
 		}
 
@@ -402,18 +404,18 @@ class VatRates
 			return isset($this->taxRules[$countryCode]['rates'][$type]) ? $this->taxRules[$countryCode]['rates'][$type] : 0;
 		}
 
-		return $this->getRules($countryCode)['rate'];
+		return $this->getRules($countryCode, $date)['rate'];
 	}
 
 
-	private function getRules(string $countryCode): array
+	private function getRules(string $countryCode, ?DateTimeInterface $date = null): array
 	{
 		if (!isset($this->taxRules[$countryCode])) {
 			return ['rate' => 0];
 		}
 		if (isset($this->taxRules[$countryCode]['since'])) {
 			foreach ($this->taxRules[$countryCode]['since'] as $since => $rates) {
-				if (strtotime($since) <= $this->now) {
+				if (new DateTimeImmutable($since) <= ($date ?? $this->now)) {
 					return $rates;
 				}
 			}

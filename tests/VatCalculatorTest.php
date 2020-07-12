@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Spaze\VatCalculator;
 
+use DateTimeImmutable;
 use PHPUnit_Framework_TestCase;
 use ReflectionClass;
 use SoapClient;
@@ -12,6 +13,8 @@ use stdClass;
 
 class VatCalculatorTest extends PHPUnit_Framework_TestCase
 {
+
+	private const DATE = '2020-06-30 23:59:59 Europe/Berlin';
 
 	/** @var VatCalculator */
 	private $vatCalculator;
@@ -32,7 +35,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$class = new ReflectionClass($this->vatRates);
 		$property = $class->getProperty('now');
 		$property->setAccessible(true);
-		$property->setValue($this->vatRates, strtotime('2020-06-30 23:59:59 Europe/Berlin'));
+		$property->setValue($this->vatRates, new DateTimeImmutable(self::DATE));
 	}
 
 
@@ -52,6 +55,9 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(24.00, $result->getPrice());
 		$this->assertEquals(0.00, $result->getTaxRate());
 		$this->assertEquals(0.00, $result->getTaxValue());
+
+		$result = $this->vatCalculator->calculate(24.00, 'DE', null, false, VatRates::GENERAL, new DateTimeImmutable(self::DATE));
+		$this->assertEquals(28.56, $result->getPrice());
 	}
 
 
@@ -62,6 +68,9 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 
 		$result = $this->vatCalculator->getTaxRateForLocation('DE', null, true);
 		$this->assertEquals(0, $result);
+
+		$result = $this->vatCalculator->getTaxRateForLocation('DE', null, false, VatRates::GENERAL, new DateTimeImmutable(self::DATE));
+		$this->assertEquals(0.19, $result);
 	}
 
 
