@@ -206,6 +206,9 @@ class VatRates
 		'NO' => [ // Norway
 			'rate' => 0.25,
 		],
+		'TR' => [ // Turkey
+			'rate' => 0.18,
+		],
 	];
 
 	/**
