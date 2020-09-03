@@ -116,6 +116,14 @@ class VatRates
 		],
 		'IE' => [ // Ireland
 			'rate' => 0.23,
+			'since' => [
+				'2021-03-01 00:00:00 Europe/Dublin' => [
+					'rate' => 0.23,
+				],
+				'2020-09-01 00:00:00 Europe/Dublin' => [
+					'rate' => 0.21,
+				],
+			],
 		],
 		'IT' => [ // Italy
 			'rate' => 0.22,
