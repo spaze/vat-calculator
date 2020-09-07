@@ -181,8 +181,17 @@ class VatRates
 		'IM' => [ // Isle of Man - United Kingdom
 			'rate' => 0.20,
 		],
+	];
 
-		// Non-EU with their own VAT requirements
+	/**
+	 * Optional tax rules.
+	 *
+	 * Non-EU countries with their own VAT requirements, countries in this list
+	 * need to be added manually by `addRateForCountry()` for the rate to be applied.
+	 *
+	 * @var array<string, array>
+	 */
+	private $optionalTaxRules = [
 		'CH' => [ // Switzerland
 			'rate' => 0.077,
 			'rates' => [
@@ -190,19 +199,6 @@ class VatRates
 				self::LOW => 0.025,
 			],
 		],
-		'TR' => [ // Turkey
-			'rate' => 0.18,
-		],
-	];
-
-	/**
-	 * Optional tax rules.
-	 *
-	 * These are added manually by `addRateForCountry()`
-	 *
-	 * @var array<string, array>
-	 */
-	private $optionalTaxRules = [
 		'NO' => [ // Norway
 			'rate' => 0.25,
 		],
