@@ -190,15 +190,13 @@ class VatRates
 				self::LOW => 0.025,
 			],
 		],
-		'TR' => [ // Turkey
-			'rate' => 0.18,
-		],
 	];
 
 	/**
 	 * Optional tax rules.
 	 *
-	 * These are added manually by `addRateForCountry()`
+	 * Non-EU countries with their own VAT requirements, countries in this list
+	 * need to be added manually by `addRateForCountry()` for the rate to be applied.
 	 *
 	 * @var array<string, array>
 	 */
