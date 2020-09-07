@@ -1,11 +1,17 @@
 name: PHP Tests
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version:
+          - 7.3
+          - 7.4
 
     steps:
     - uses: actions/checkout@v2
@@ -13,16 +19,19 @@ jobs:
     - name: OS info
       run: cat /etc/os-release
 
+    - name: Set default PHP version
+      run: sudo update-alternatives --set php /usr/bin/php${{ matrix.php-version }}
+
     - name: PHP info
       run: |
         php -v
         php -m
 
-    - name: Install dependencies
-      run: composer install --no-progress --no-interaction
+    - name: Validate composer.json
+      run: composer validate --strict --no-interaction
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate --no-interaction
+    - name: Install dependencies
+      run: composer update --no-progress --no-interaction
 
     - name: Run tests
-      run: composer test-prod
+      run: composer test
