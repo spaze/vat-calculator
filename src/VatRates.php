@@ -181,15 +181,6 @@ class VatRates
 		'IM' => [ // Isle of Man - United Kingdom
 			'rate' => 0.20,
 		],
-
-		// Non-EU with their own VAT requirements
-		'CH' => [ // Switzerland
-			'rate' => 0.077,
-			'rates' => [
-				self::HIGH => 0.077,
-				self::LOW => 0.025,
-			],
-		],
 	];
 
 	/**
@@ -201,6 +192,13 @@ class VatRates
 	 * @var array<string, array>
 	 */
 	private $optionalTaxRules = [
+		'CH' => [ // Switzerland
+			'rate' => 0.077,
+			'rates' => [
+				self::HIGH => 0.077,
+				self::LOW => 0.025,
+			],
+		],
 		'NO' => [ // Norway
 			'rate' => 0.25,
 		],
