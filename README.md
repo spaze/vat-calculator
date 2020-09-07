@@ -142,6 +142,7 @@ try {
 ## Countries
 
 EU countries are supported as well as some non-EU countries that use VAT. Some countries are not supported even though they also have VAT. Currently, that's the case for the following countries:
+- Switzerland (CH)
 - Norway (NO)
 - Turkey (TR)
 
