@@ -124,13 +124,7 @@ class VatCalculator
 	 */
 	public function isValidVatNumber(string $vatNumber): bool
 	{
-		$details = $this->getVatDetails($vatNumber);
-
-		if ($details) {
-			return $details->isValid();
-		} else {
-			return false;
-		}
+		return $this->getVatDetails($vatNumber)->isValid();
 	}
 
 
