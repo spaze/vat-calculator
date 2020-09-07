@@ -5,6 +5,7 @@ namespace Spaze\VatCalculator;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Spaze\VatCalculator\Exceptions\NoVatRulesForCountryException;
 
 class VatRates
 {
@@ -23,7 +24,7 @@ class VatRates
 	 *
 	 * Taken from: http://ec.europa.eu/taxation_customs/resources/documents/taxation/vat/how_vat_works/rates/vat_rates_en.pdf
 	 *
-	 * @var array<string, array>
+	 * @var array<string, array{rate: float, rates?: array, exceptions?: array, since?: array}>
 	 */
 	private $taxRules = [
 		'AT' => [ // Austria
@@ -189,7 +190,7 @@ class VatRates
 	 * Non-EU countries with their own VAT requirements, countries in this list
 	 * need to be added manually by `addRateForCountry()` for the rate to be applied.
 	 *
-	 * @var array<string, array>
+	 * @var array<string, array{rate: float, rates?: array, exceptions?: array, since?: array}>
 	 */
 	private $optionalTaxRules = [
 		'CH' => [ // Switzerland
@@ -368,10 +369,17 @@ class VatRates
 	}
 
 
+	/**
+	 * @param string $country
+	 * @throws NoVatRulesForCountryException
+	 */
 	public function addRateForCountry(string $country): void
 	{
 		$country = strtoupper($country);
-		$this->taxRules[$country] = $this->optionalTaxRules[$country] ?? null;
+		if (!isset($this->optionalTaxRules[$country])) {
+			throw new NoVatRulesForCountryException("No optional tax rules specified for {$country}");
+		}
+		$this->taxRules[$country] = $this->optionalTaxRules[$country];
 	}
 
 
@@ -400,21 +408,29 @@ class VatRates
 				if (!preg_match($postalCodeException['postalCode'], $postalCode)) {
 					continue;
 				}
-				if (isset($postalCodeException['name'])) {
+				if (isset($postalCodeException['name'], $this->taxRules[$postalCodeException['code']]['exceptions'])) {
 					return $this->taxRules[$postalCodeException['code']]['exceptions'][$postalCodeException['name']];
 				}
 				return $this->getRules($postalCodeException['code'], $date)['rate'];
 			}
 		}
 
+		$rules = $this->getRules($countryCode, $date);
 		if ($type !== VatRates::GENERAL) {
-			return isset($this->taxRules[$countryCode]['rates'][$type]) ? $this->taxRules[$countryCode]['rates'][$type] : 0;
+			if (isset($rules['rates'])) {
+				return $rules['rates'][$type];
+			}
 		}
 
-		return $this->getRules($countryCode, $date)['rate'];
+		return $rules['rate'];
 	}
 
 
+	/**
+	 * @param string $countryCode
+	 * @param DateTimeInterface|null $date
+	 * @return array{rate: float, rates?: array, exceptions?: array, since?: array}
+	 */
 	private function getRules(string $countryCode, ?DateTimeInterface $date = null): array
 	{
 		if (!isset($this->taxRules[$countryCode])) {

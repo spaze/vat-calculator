@@ -15,8 +15,9 @@
 		}
 	],
 	"require": {
-	  "php": ">=7.3",
-	  "ext-soap": "*"
+		"php": ">=7.3",
+		"ext-soap": "*",
+		"phpstan/phpstan": "^0.12.42"
 	},
 	"require-dev": {
 		"phpunit/php-timer": "1.0.*",
@@ -29,8 +30,10 @@
 	},
 	"minimum-stability": "stable",
 	"scripts": {
+		"phpstan-dev": "vendor/bin/phpstan --ansi analyse --configuration phpstan.neon",
 		"phpunit-dev": "php vendor/phpunit/phpunit/phpunit --colors=always --verbose",
 		"test": [
+			"@phpstan-dev",
 			"@phpunit-dev"
 		]
 	}

@@ -1,0 +1,12 @@
+parameters:
+	paths:
+		- src
+	level: max
+	ignoreErrors:
+		-
+			message: '#^Call to an undefined method SoapClient::checkVatApprox\(\)\.$#'
+			path: src/VatCalculator.php
+			count: 1
+
+includes:
+	- vendor/phpstan/phpstan/conf/bleedingEdge.neon

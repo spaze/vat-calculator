@@ -162,4 +162,4 @@ This library is licensed under the MIT license. Please see [License file](LICENS
 
 <a name="contributing"></a>
 ## Contributing
-Run PHPUnit tests with `composer test`, see `scripts` in `composer.json`. Tests are also run on GitHub with Actions on each push.
+Run PHPUnit tests and static analysis with `composer test`, see `scripts` in `composer.json`. Tests are also run on GitHub with Actions on each push.
