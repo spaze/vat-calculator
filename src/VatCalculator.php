@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Spaze\VatCalculator;
 
 use DateTimeInterface;
+use Spaze\VatCalculator\Exceptions\UnsupportedCountryException;
 use Spaze\VatCalculator\Exceptions\VatCheckUnavailableException;
 use SoapClient;
 use SoapFault;
@@ -139,6 +140,11 @@ class VatCalculator
 		$vatNumber = str_replace([' ', "\xC2\xA0", "\xA0", '-', '.', ','], '', trim($vatNumber));
 		$countryCode = substr($vatNumber, 0, 2);
 		$vatNumber = substr($vatNumber, 2);
+
+		if (!$this->shouldCollectVat($countryCode)) {
+			throw new UnsupportedCountryException($countryCode);
+		}
+
 		try {
 			if ($this->soapClient === null) {
 				$this->soapClient = new SoapClient(self::VAT_SERVICE_URL);
