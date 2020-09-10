@@ -98,7 +98,7 @@ if ($vatCalculator->shouldCollectVat('DE')) {
 ```
 
 To validate your customers VAT numbers, you can use the `isValidVatNumber` method.
-The VAT number should be in a format specified by the [VIES](http://ec.europa.eu/taxation_customs/vies/faqvies.do#item_11).
+The VAT number should be in a format specified by the [VIES](https://ec.europa.eu/taxation_customs/vies/faqvies.do#item_11).
 The given VAT numbers will be truncated and non relevant characters / whitespace will automatically be removed.
 
 This service relies on a third party SOAP API provided by the EU. If, for whatever reason, this API is unavailable a `VatCheckUnavailableException` will be thrown.
@@ -117,7 +117,7 @@ try {
 ### Get EU VAT number details
 
 To get the details of a VAT number, you can use the `getVatDetails` method.
-The VAT number should be in a format specified by the [VIES](http://ec.europa.eu/taxation_customs/vies/faqvies.do#item_11).
+The VAT number should be in a format specified by the [VIES](https://ec.europa.eu/taxation_customs/vies/faqvies.do#item_11).
 The given VAT numbers will be truncated and non relevant characters / whitespace will automatically be removed.
 
 This service relies on a third party SOAP API provided by the EU. If, for whatever reason, this API is unavailable a `VatCheckUnavailableException` will be thrown.
