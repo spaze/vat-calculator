@@ -8,6 +8,7 @@
 * `calculate()` & `calculateNet()` methods return `VatPrice` object instead of the calculated price (**BR BREAK**)
 * After running `calculate()` & `calculateNet()`, the `VatCalculator` object keeps its state, `getNetPrice()`, `getTaxRate()`, `getCountryCode()`, `setCountryCode()`, `getPostalCode()`, `setPostalCode()`, `isCompany()`, `setCompany()` removed (**BR BREAK**)
 * Norway, Turkey, Switzerland VAT rates removed, can be manually added back with `VatRates::addRateForCountry()`
+* `shouldCollectVat()` will also return `true` for those manually added non-EU countries, use `shouldCollectEuVat()` to return `true` only for EU member states
 * `getIPBasedCountry()` & `getClientIP()` methods have been removed, use some other package (or `CF-IPCountry` HTTP header if you're behind Cloudflare)
 * Some methods have been properly *camelCased*: methods like `getClientIP()` -> `getClientIp()` and `shouldCollectVAT` -> `shouldCollectVat` and a few more
 * `VATCheckUnavailableException` has been *camelCased* to `VatCheckUnavailableException`

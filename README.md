@@ -89,10 +89,16 @@ $grossPrice->getTaxRate();
 ### Validate EU VAT numbers
 
 Prior to validating your customers VAT numbers, you can use the `shouldCollectVat` method to check if the country code requires you to collect VAT
-in the first place.
+in the first place. This method will return `true` even for non-EU countries added manually with `addRateForCountry` (see below).
+
+To ignore those manually added non-EU countries and return `true` only for EU member states, you can use `shouldCollectEuVat`.
 
 ```php
 if ($vatCalculator->shouldCollectVat('DE')) {
+
+}
+
+if ($vatCalculator->shouldCollectEuVat('DE')) {
 
 }
 ```
@@ -103,7 +109,7 @@ The given VAT numbers will be truncated and non relevant characters / whitespace
 
 This service relies on a third party SOAP API provided by the EU. If, for whatever reason, this API is unavailable a `VatCheckUnavailableException` will be thrown.
 
-If a VAT number from a unsupported/non-EU country is provided, `UnsupportedCountryException` will be thrown.
+If a VAT number from an unsupported/non-EU country is provided, `UnsupportedCountryException` will be thrown.
 
 ```php
 try {
