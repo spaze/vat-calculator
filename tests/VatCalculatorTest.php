@@ -8,6 +8,7 @@ use PHPUnit_Framework_TestCase;
 use ReflectionClass;
 use SoapClient;
 use SoapFault;
+use Spaze\VatCalculator\Exceptions\UnsupportedCountryException;
 use Spaze\VatCalculator\Exceptions\VatCheckUnavailableException;
 use stdClass;
 
@@ -103,21 +104,21 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	{
 		$result = new stdClass();
 		$result->valid = false;
-		$result->countryCode = 'So';
-		$result->vatNumber = 'meInvalidNumber';
+		$result->countryCode = 'Se';
+		$result->vatNumber = 'riouslyInvalidNumber';
 		$result->requestIdentifier = null;
 
 		$this->vatCheck->expects($this->any())
 			->method('checkVatApprox')
 			->with([
-				'countryCode' => 'So',
-				'vatNumber' => 'meInvalidNumber',
+				'countryCode' => 'Se',
+				'vatNumber' => 'riouslyInvalidNumber',
 				'requesterCountryCode' => null,
 				'requesterVatNumber' => null,
 			])
 			->willReturn($result);
 
-		$vatNumber = 'SomeInvalidNumber';
+		$vatNumber = 'SeriouslyInvalidNumber';  // but valid country SE
 		$this->vatCalculator->setSoapClient($this->vatCheck);
 		$result = $this->vatCalculator->isValidVatNumber($vatNumber);
 		$this->assertFalse($result);
@@ -130,20 +131,27 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$this->vatCheck->expects($this->any())
 			->method('checkVatApprox')
 			->with([
-				'countryCode' => 'So',
-				'vatNumber' => 'meInvalidNumber',
+				'countryCode' => 'Se',
+				'vatNumber' => 'riouslyInvalidNumber',
 				'requesterCountryCode' => null,
 				'requesterVatNumber' => null,
 			])
 			->willThrowException(new SoapFault('Server', 'Something went wrong'));
 
-		$vatNumber = 'SomeInvalidNumber';
+		$vatNumber = 'SeriouslyInvalidNumber';  // but valid country SE
 		$this->vatCalculator->setSoapClient($this->vatCheck);
 		$this->vatCalculator->isValidVatNumber($vatNumber);
 	}
 
 
-	public function testCanValidateValidVatNumberWithRequesterVatNumber()
+	public function testValidateVatNumberThrowsExceptionOnInvalidCountry(): void
+	{
+		$this->setExpectedException(UnsupportedCountryException::class, 'Unsupported/non-EU country In');
+		$this->vatCalculator->isValidVatNumber('InvalidEuCountry');
+	}
+
+
+		public function testCanValidateValidVatNumberWithRequesterVatNumber()
 	{
 		$result = new stdClass();
 		$result->valid = true;
@@ -197,15 +205,6 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$this->assertSame('DE', $result->getCountryCode());
 		$this->assertSame('190098891', $result->getVatNumber());
 		$this->assertSame('FOOBAR338', $result->getRequestId());
-	}
-
-
-	public function testCannotValidateVatNumberWhenServiceIsDown()
-	{
-		$this->setExpectedException(VatCheckUnavailableException::class);
-
-		$vatNumber = 'SomeInvalidNumber';
-		$this->vatCalculator->isValidVatNumber($vatNumber);
 	}
 
 

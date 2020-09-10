@@ -103,6 +103,8 @@ The given VAT numbers will be truncated and non relevant characters / whitespace
 
 This service relies on a third party SOAP API provided by the EU. If, for whatever reason, this API is unavailable a `VatCheckUnavailableException` will be thrown.
 
+If a VAT number from a unsupported/non-EU country is provided, `UnsupportedCountryException` will be thrown.
+
 ```php
 try {
 	$validVat = $vatCalculator->isValidVatNumber('NL 123456789 B01');
@@ -119,6 +121,8 @@ The VAT number should be in a format specified by the [VIES](http://ec.europa.eu
 The given VAT numbers will be truncated and non relevant characters / whitespace will automatically be removed.
 
 This service relies on a third party SOAP API provided by the EU. If, for whatever reason, this API is unavailable a `VatCheckUnavailableException` will be thrown.
+
+If a VAT number from a unsupported/non-EU country is provided, `UnsupportedCountryException` will be thrown.
 
 ```php
 try {

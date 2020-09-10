@@ -11,6 +11,7 @@
 * `getIPBasedCountry()` & `getClientIP()` methods have been removed, use some other package (or `CF-IPCountry` HTTP header if you're behind Cloudflare)
 * Some methods have been properly *camelCased*: methods like `getClientIP()` -> `getClientIp()` and `shouldCollectVAT` -> `shouldCollectVat` and a few more
 * `VATCheckUnavailableException` has been *camelCased* to `VatCheckUnavailableException`
+* If a VAT number from a unsupported/non-EU country is provided for validation or for `getVatDetails()` call, `UnsupportedCountryException` will be thrown
 * Requires PHP 7.3
 
 # Upgrading from 1.* to 2.*
