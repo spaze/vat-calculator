@@ -12,6 +12,7 @@
 * Some methods have been properly *camelCased*: methods like `getClientIP()` -> `getClientIp()` and `shouldCollectVAT` -> `shouldCollectVat` and a few more
 * `VATCheckUnavailableException` has been *camelCased* to `VatCheckUnavailableException`
 * If a VAT number from a unsupported/non-EU country is provided for validation or for `getVatDetails()` call, `UnsupportedCountryException` will be thrown
+* VIES WSDL is now loaded over HTTPS, if you hit issues you should update your system's list of trusted CAs, or install [composer/ca-bundle](https://github.com/composer/ca-bundle), use it [with PHP streams](https://github.com/composer/ca-bundle#to-use-with-php-streams), create your own `SoapClient` instance with `stream_context` option (`new SoapClient(self::VAT_SERVICE_URL, ['stream_context' => $context])`) and use `VatCalculator::setSoapClient()` to use the custom client
 * Requires PHP 7.3
 
 # Upgrading from 1.* to 2.*

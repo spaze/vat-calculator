@@ -22,7 +22,7 @@ class VatRates
 	/**
 	 * All available tax rules and their exceptions.
 	 *
-	 * Taken from: http://ec.europa.eu/taxation_customs/resources/documents/taxation/vat/how_vat_works/rates/vat_rates_en.pdf
+	 * Taken from: https://ec.europa.eu/taxation_customs/resources/documents/taxation/vat/how_vat_works/rates/vat_rates_en.pdf
 	 *
 	 * @var array<string, array{rate: float, rates?: array, exceptions?: array, since?: array}>
 	 */
