@@ -389,6 +389,13 @@ class VatRates
 	}
 
 
+	public function shouldCollectEuVat(string $countryCode): bool
+	{
+		$countryCode = strtoupper($countryCode);
+		return isset($this->taxRules[$countryCode]) && !isset($this->optionalTaxRules[$countryCode]);
+	}
+
+
 	/**
 	 * Returns the tax rate for the given country code.
 	 * If a postal code is provided, it will try to lookup the different

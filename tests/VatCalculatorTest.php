@@ -208,6 +208,22 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
+	public function testAddNonEuRateShouldCollectValidateThrows(): void
+	{
+		$this->assertFalse($this->vatCalculator->shouldCollectVat('NO'));
+		$this->assertFalse($this->vatCalculator->shouldCollectEuVat('NO'));
+		$this->vatRates->addRateForCountry('NO');
+		$this->assertTrue($this->vatCalculator->shouldCollectVat('NO'));
+		$this->assertFalse($this->vatCalculator->shouldCollectEuVat('NO'));
+
+		$this->setExpectedException(UnsupportedCountryException::class, 'Unsupported/non-EU country No');
+
+		$vatNumber = 'Norway132';  // unsupported country NO
+		$result = $this->vatCalculator->isValidVatNumber($vatNumber);
+		$this->assertFalse($result);
+	}
+
+
 	public function testSetBusinessCountryCode()
 	{
 		$this->vatCalculator->setBusinessCountryCode('DE');

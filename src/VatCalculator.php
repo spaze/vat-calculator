@@ -44,6 +44,12 @@ class VatCalculator
 	}
 
 
+	public function shouldCollectEuVat(string $countryCode): bool
+	{
+		return $this->vatRates->shouldCollectEuVat($countryCode);
+	}
+
+
 	/**
 	 * Calculate the VAT based on the net price, country code and indication if the
 	 * customer is a company or not. Specify a date to use VAT rate valid for that date.
@@ -141,7 +147,7 @@ class VatCalculator
 		$countryCode = substr($vatNumber, 0, 2);
 		$vatNumber = substr($vatNumber, 2);
 
-		if (!$this->shouldCollectVat($countryCode)) {
+		if (!$this->shouldCollectEuVat($countryCode)) {
 			throw new UnsupportedCountryException($countryCode);
 		}
 
