@@ -128,6 +128,7 @@ class VatCalculator
 	 * @param string $vatNumber
 	 * @return bool
 	 * @throws VatCheckUnavailableException
+	 * @throws UnsupportedCountryException
 	 */
 	public function isValidVatNumber(string $vatNumber): bool
 	{
@@ -140,6 +141,7 @@ class VatCalculator
 	 * @param string|null $requesterVatNumber
 	 * @return VatDetails
 	 * @throws VatCheckUnavailableException
+	 * @throws UnsupportedCountryException
 	 */
 	public function getVatDetails(string $vatNumber, ?string $requesterVatNumber = null): VatDetails
 	{
