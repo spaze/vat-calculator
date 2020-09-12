@@ -151,7 +151,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-		public function testCanValidateValidVatNumberWithRequesterVatNumber()
+	public function testCanValidateValidVatNumberWithRequesterVatNumber()
 	{
 		$result = new stdClass();
 		$result->valid = true;

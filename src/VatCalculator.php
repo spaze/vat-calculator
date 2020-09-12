@@ -17,7 +17,7 @@ class VatCalculator
 	 *
 	 * @var string
 	 */
-	const VAT_SERVICE_URL = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
+	public const VAT_SERVICE_URL = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 
 	/** @var SoapClient */
 	private $soapClient;

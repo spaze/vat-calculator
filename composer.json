@@ -23,7 +23,8 @@
 		"php-parallel-lint/php-parallel-lint": "^1.2",
 		"php-parallel-lint/php-console-highlighter": "^0.5.0",
 		"phpunit/php-timer": "1.0.*",
-		"phpunit/phpunit": "4.7.*"
+		"phpunit/phpunit": "4.7.*",
+		"spaze/coding-standard": "^0.0.2"
 	},
 	"autoload": {
 		"psr-4": {
@@ -33,10 +34,12 @@
 	"minimum-stability": "stable",
 	"scripts": {
 		"lint": "vendor/bin/parallel-lint --colors src/ tests/",
+		"phpcs": "vendor/bin/phpcs src/ tests/",
 		"phpstan-dev": "vendor/bin/phpstan --ansi analyse --configuration phpstan.neon",
 		"phpunit-dev": "php vendor/phpunit/phpunit/phpunit --colors=always --verbose",
 		"test": [
 			"@lint",
+			"@phpcs",
 			"@phpstan-dev",
 			"@phpunit-dev"
 		]
