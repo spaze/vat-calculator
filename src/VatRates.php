@@ -358,7 +358,6 @@ class VatRates
 		],
 	];
 
-
 	/** @var DateTimeImmutable */
 	private $now;
 
