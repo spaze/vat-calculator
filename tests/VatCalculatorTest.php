@@ -8,6 +8,7 @@ use PHPUnit_Framework_TestCase;
 use ReflectionClass;
 use SoapClient;
 use SoapFault;
+use Spaze\VatCalculator\Exceptions\InvalidCharsInVatNumberException;
 use Spaze\VatCalculator\Exceptions\UnsupportedCountryException;
 use Spaze\VatCalculator\Exceptions\VatCheckUnavailableException;
 use stdClass;
@@ -148,6 +149,13 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	{
 		$this->setExpectedException(UnsupportedCountryException::class, 'Unsupported/non-EU country In');
 		$this->vatCalculator->isValidVatNumber('InvalidEuCountry');
+	}
+
+
+	public function testValidateVatNumberThrowsExceptionOnInvalidChars(): void
+	{
+		$this->setExpectedException(InvalidCharsInVatNumberException::class, 'VAT number CY123Μ456_789 contains invalid characters: Μ (0xce9c) at offset 5, _ (0x5f) at offset 10');
+		$this->vatCalculator->isValidVatNumber('CY123Μ456_789');
 	}
 
 
