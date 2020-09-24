@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Spaze\VatCalculator;
 
 use DateTimeInterface;
+use Spaze\VatCalculator\Exceptions\InvalidCharsInVatNumberException;
 use Spaze\VatCalculator\Exceptions\UnsupportedCountryException;
 use Spaze\VatCalculator\Exceptions\VatCheckUnavailableException;
 use SoapClient;
@@ -129,6 +130,7 @@ class VatCalculator
 	 * @return bool
 	 * @throws VatCheckUnavailableException
 	 * @throws UnsupportedCountryException
+	 * @throws InvalidCharsInVatNumberException
 	 */
 	public function isValidVatNumber(string $vatNumber): bool
 	{
@@ -142,10 +144,18 @@ class VatCalculator
 	 * @return VatDetails
 	 * @throws VatCheckUnavailableException
 	 * @throws UnsupportedCountryException
+	 * @throws InvalidCharsInVatNumberException
 	 */
 	public function getVatDetails(string $vatNumber, ?string $requesterVatNumber = null): VatDetails
 	{
 		$vatNumber = str_replace([' ', "\xC2\xA0", "\xA0", '-', '.', ','], '', trim($vatNumber));
+
+		// Regex from https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl sans the quantifiers
+		$invalidChars = preg_split('/[0-9A-Za-z+*.]+/', $vatNumber, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_OFFSET_CAPTURE);
+		if ($invalidChars) {
+			throw new InvalidCharsInVatNumberException($invalidChars, $vatNumber);
+		}
+
 		$countryCode = substr($vatNumber, 0, 2);
 		$vatNumber = substr($vatNumber, 2);
 

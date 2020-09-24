@@ -3,10 +3,9 @@ declare(strict_types = 1);
 
 namespace Spaze\VatCalculator\Exceptions;
 
-use Exception;
 use Throwable;
 
-class UnsupportedCountryException extends Exception
+class UnsupportedCountryException extends VatNumberException
 {
 
 	public function __construct(string $countryCode, int $code = 0, Throwable $previous = null)
