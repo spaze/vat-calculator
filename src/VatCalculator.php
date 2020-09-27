@@ -33,9 +33,15 @@ class VatCalculator
 	private $businessVatNumber;
 
 
-	public function __construct(VatRates $vatRates)
+	public function __construct(VatRates $vatRates, ?string $businessCountryCode = null, ?string $businessVatNumber = null)
 	{
 		$this->vatRates = $vatRates;
+		if ($businessCountryCode) {
+			$this->setBusinessCountryCode($businessCountryCode);
+		}
+		if ($businessVatNumber) {
+			$this->setBusinessVatNumber($businessVatNumber);
+		}
 	}
 
 
