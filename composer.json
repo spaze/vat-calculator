@@ -1,6 +1,6 @@
 {
 	"name": "spaze/vat-calculator",
-	"description": "EU VAT calculation, the way it should be.",
+	"description": "EU VAT calculation, the way it should be. Standalone & modernized fork of mpociot/vat-calculator, with some new features.",
 	"keywords": ["VAT","Tax","EU MOSS", "VAT ID", "tax calculation", "vat calculation"],
 	"license": "MIT",
 	"authors": [
