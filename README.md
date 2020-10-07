@@ -63,7 +63,7 @@ $price->getTaxRate();
 ## Usage
 <a name="calculate-the-gross-price"></a>
 ### Calculate the gross price
-To calculate the gross price (price with VAT added) use the `calculate` method with a net price, a country code, a postal code (null if unknow) and whether you're calculating VAT for a customer that's a company as paremeters.
+To calculate the gross price (price with VAT added) use the `calculate` method with a net price, a country code, a postal code (null if unknown) and whether you're calculating VAT for a customer that's a company as parameters.
 
 ```php
 $grossPrice = $vatCalculator->calculate(24.00, 'DE', null, false /* [, $rateType [, $dateTime]] */);
@@ -129,7 +129,7 @@ The given VAT numbers will be truncated and non relevant characters / whitespace
 
 This service relies on a third party SOAP API provided by the EU. If, for whatever reason, this API is unavailable a `VatCheckUnavailableException` will be thrown.
 
-If a VAT number from a unsupported/non-EU country is provided, `UnsupportedCountryException` will be thrown.
+If a VAT number from an unsupported/non-EU country is provided, `UnsupportedCountryException` will be thrown.
 
 ```php
 try {
