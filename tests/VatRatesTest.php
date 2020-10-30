@@ -66,4 +66,13 @@ class VatRatesTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(0.19, $this->vatRates->getTaxRateForLocation('DE', null, VatRates::GENERAL, new DateTimeImmutable($date)));
 	}
 
+
+	public function testGetAllKnownRates(): void
+	{
+		$this->assertEquals([0.20, 0.19], $this->vatRates->getAllKnownRates('AT'));
+		$this->assertEquals([0.21], $this->vatRates->getAllKnownRates('CZ'));
+		$this->assertEquals([0.19, 0, 0.16], $this->vatRates->getAllKnownRates('DE'));
+		$this->assertEquals([0.21, 0.09], $this->vatRates->getAllKnownRates('NL'));
+	}
+
 }
