@@ -452,4 +452,49 @@ class VatRates
 		return $this->taxRules[$countryCode];
 	}
 
+
+	/**
+	 * Get an array of all known VAT rates for given country.
+	 *
+	 * Returns current rate, high & low rates, historical & future rates, exceptions, unsorted.
+	 *
+	 * @param string $country
+	 * @return array<integer, float>
+	 */
+	public function getAllKnownRates(string $country): array
+	{
+		if (!isset($this->taxRules[$country])) {
+			return [];
+		}
+
+		$rates = $this->getRates($this->taxRules[$country]);
+		if (isset($this->taxRules[$country]['since'])) {
+			foreach ($this->taxRules[$country]['since'] as $sinceRules) {
+				$rates = array_merge($rates, $this->getRates($sinceRules));
+			}
+		}
+		return array_values(array_unique($rates));
+	}
+
+
+	/**
+	 * @param array{rate: float, rates?: array, exceptions?: array} $taxRules
+	 * @return array<integer, float>
+	 */
+	private function getRates(array $taxRules): array
+	{
+		$rates = [$taxRules['rate']];
+		if (isset($taxRules['rates'])) {
+			foreach ($taxRules['rates'] as $rate) {
+				$rates[] = $rate;
+			}
+		}
+		if (isset($taxRules['exceptions'])) {
+			foreach ($taxRules['exceptions'] as $rate) {
+				$rates[] = $rate;
+			}
+		}
+		return $rates;
+	}
+
 }

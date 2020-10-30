@@ -26,6 +26,7 @@ $vatCalculator->isValidVatNumber('NL123456789B01');
 	- [Validate EU VAT numbers](#validate-eu-vat-numbers)
 	- [Get EU VAT number details](#vat-number-details)
 	- [Get the IP based country of your user](#get-ip-based-country)
+	- [Get all known rates for a country](#all-known-rates)
 	- [Countries](#countries)
 - [License](#license)
 - [Contributing](#contributing)
@@ -148,6 +149,18 @@ try {
 	// Please handle me
 }
 ```
+
+<a name="all-known-rates"></a>
+### Get all known rates for a country
+
+Get all known rates (current, high & low, historical & future, exceptions) for a country by:
+
+```php
+$vatRates = new VatRates();
+$vatRates->getAllKnownRates('DE');
+```
+
+The returned array of rates is unsorted. This method can be useful when you want to prefill a selectbox with known VAT rates for a country for example, or when you want to validate user-provided rates.
 
 <a name="countries"></a>
 ## Countries
