@@ -4,18 +4,18 @@ declare(strict_types = 1);
 namespace Spaze\VatCalculator;
 
 use DateTimeImmutable;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Spaze\VatCalculator\Exceptions\NoVatRulesForCountryException;
 
-class VatRatesTest extends PHPUnit_Framework_TestCase
+class VatRatesTest extends TestCase
 {
 
 	/** @var VatRates */
 	private $vatRates;
 
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->vatRates = new VatRates();
 	}
@@ -37,7 +37,7 @@ class VatRatesTest extends PHPUnit_Framework_TestCase
 		$country = 'yEs';
 		$this->assertFalse($this->vatRates->shouldCollectVat($country));
 		$this->assertEquals(0, $this->vatRates->getTaxRateForLocation($country, null));
-		$this->setExpectedException(NoVatRulesForCountryException::class);
+		$this->expectException(NoVatRulesForCountryException::class);
 		$this->vatRates->addRateForCountry($country);
 		$this->assertFalse($this->vatRates->shouldCollectVat($country));
 		$this->assertEquals(0, $this->vatRates->getTaxRateForLocation($country, null));
