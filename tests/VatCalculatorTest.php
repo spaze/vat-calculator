@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Spaze\VatCalculator;
 
 use DateTimeImmutable;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use SoapClient;
 use SoapFault;
@@ -13,7 +13,7 @@ use Spaze\VatCalculator\Exceptions\UnsupportedCountryException;
 use Spaze\VatCalculator\Exceptions\VatCheckUnavailableException;
 use stdClass;
 
-class VatCalculatorTest extends PHPUnit_Framework_TestCase
+class VatCalculatorTest extends TestCase
 {
 
 	private const DATE = '2020-06-30 23:59:59 Europe/Berlin';
@@ -28,7 +28,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	private $vatRates;
 
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->vatRates = new VatRates();
 		$this->vatCalculator = new VatCalculator($this->vatRates);
@@ -41,7 +41,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testCalculateVat()
+	public function testCalculateVat(): void
 	{
 		$result = $this->vatCalculator->calculate(24.00, 'DE', null, false);
 		$this->assertEquals(28.56, $result->getPrice());
@@ -63,7 +63,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testGetTaxRateForLocation()
+	public function testGetTaxRateForLocation(): void
 	{
 		$result = $this->vatCalculator->getTaxRateForLocation('DE', null, false);
 		$this->assertEquals(0.19, $result);
@@ -76,7 +76,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testCanValidateValidVatNumber()
+	public function testCanValidateValidVatNumber(): void
 	{
 		$result = new stdClass();
 		$result->valid = true;
@@ -101,7 +101,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testCanValidateInvalidVatNumber()
+	public function testCanValidateInvalidVatNumber(): void
 	{
 		$result = new stdClass();
 		$result->valid = false;
@@ -126,9 +126,9 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testValidateVatNumberThrowsExceptionOnSoapFailure()
+	public function testValidateVatNumberThrowsExceptionOnSoapFailure(): void
 	{
-		$this->setExpectedException(VatCheckUnavailableException::class);
+		$this->expectException(VatCheckUnavailableException::class);
 		$this->vatCheck->expects($this->any())
 			->method('checkVatApprox')
 			->with([
@@ -147,19 +147,21 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 
 	public function testValidateVatNumberThrowsExceptionOnInvalidCountry(): void
 	{
-		$this->setExpectedException(UnsupportedCountryException::class, 'Unsupported/non-EU country In');
+		$this->expectException(UnsupportedCountryException::class);
+		$this->expectExceptionMessage('Unsupported/non-EU country In');
 		$this->vatCalculator->isValidVatNumber('InvalidEuCountry');
 	}
 
 
 	public function testValidateVatNumberThrowsExceptionOnInvalidChars(): void
 	{
-		$this->setExpectedException(InvalidCharsInVatNumberException::class, 'VAT number CY123Μ456_789 contains invalid characters: Μ (0xce9c) at offset 5, _ (0x5f) at offset 10');
+		$this->expectException(InvalidCharsInVatNumberException::class);
+		$this->expectExceptionMessage('VAT number CY123Μ456_789 contains invalid characters: Μ (0xce9c) at offset 5, _ (0x5f) at offset 10');
 		$this->vatCalculator->isValidVatNumber('CY123Μ456_789');
 	}
 
 
-	public function testCanValidateValidVatNumberWithRequesterVatNumber()
+	public function testCanValidateValidVatNumberWithRequesterVatNumber(): void
 	{
 		$result = new stdClass();
 		$result->valid = true;
@@ -188,7 +190,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testCanValidateValidVatNumberWithRequesterVatNumberSet()
+	public function testCanValidateValidVatNumberWithRequesterVatNumberSet(): void
 	{
 		$result = new stdClass();
 		$result->valid = true;
@@ -224,7 +226,8 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue($this->vatCalculator->shouldCollectVat('NO'));
 		$this->assertFalse($this->vatCalculator->shouldCollectEuVat('NO'));
 
-		$this->setExpectedException(UnsupportedCountryException::class, 'Unsupported/non-EU country No');
+		$this->expectException(UnsupportedCountryException::class);
+		$this->expectExceptionMessage('Unsupported/non-EU country No');
 
 		$vatNumber = 'Norway132';  // unsupported country NO
 		$result = $this->vatCalculator->isValidVatNumber($vatNumber);
@@ -232,7 +235,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testSetBusinessCountryCode()
+	public function testSetBusinessCountryCode(): void
 	{
 		$this->vatCalculator->setBusinessCountryCode('DE');
 		$result = $this->vatCalculator->calculate(24.00, 'DE', null, true);
@@ -248,7 +251,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testChecksPostalCodeForVatExceptions()
+	public function testChecksPostalCodeForVatExceptions(): void
 	{
 		$postalCode = '27498'; // Heligoland
 		$result = $this->vatCalculator->calculate(24.00, 'DE', $postalCode, false);
@@ -276,7 +279,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testPostalCodesWithoutExceptionsGetStandardRate()
+	public function testPostalCodesWithoutExceptionsGetStandardRate(): void
 	{
 		// Invalid post code
 		$postalCode = 'IGHJ987ERT35';
@@ -296,7 +299,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testShouldCollectVat()
+	public function testShouldCollectVat(): void
 	{
 		$this->assertTrue($this->vatCalculator->shouldCollectVat('DE'));
 		$this->assertTrue($this->vatCalculator->shouldCollectVat('NL'));
@@ -305,7 +308,7 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testCalculateNet()
+	public function testCalculateNet(): void
 	{
 		$result = $this->vatCalculator->calculateNet(28.56, 'DE', null, false);
 		$this->assertEquals(24.00, $result->getNetPrice());
@@ -319,14 +322,14 @@ class VatCalculatorTest extends PHPUnit_Framework_TestCase
 	}
 
 
-	public function testCalculateHighVatType()
+	public function testCalculateHighVatType(): void
 	{
 		$result = $this->vatCalculator->calculate(24.00, 'NL', null, false, VatRates::HIGH);
 		$this->assertEquals(29.04, $result->getPrice());
 	}
 
 
-	public function testCalculateLowVatType()
+	public function testCalculateLowVatType(): void
 	{
 		$result = $this->vatCalculator->calculate(24.00, 'NL', null, false, VatRates::LOW);
 		$this->assertEquals(26.16, $result->getPrice());
