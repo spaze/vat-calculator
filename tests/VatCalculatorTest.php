@@ -235,6 +235,35 @@ class VatCalculatorTest extends TestCase
 	}
 
 
+	public function testAddGbRateShouldCollectWithPostalCodeException(): void
+	{
+		$this->assertFalse($this->vatCalculator->shouldCollectVat('GB'));
+		$this->assertFalse($this->vatCalculator->shouldCollectEuVat('GB'));
+		$result = $this->vatCalculator->calculate(24.00, 'GB', null, true);
+		$this->assertEquals(24.00, $result->getPrice());
+		$this->assertEquals(0.00, $result->getTaxRate());
+		$this->assertEquals(0.00, $result->getTaxValue());
+
+		$this->vatRates->addRateForCountry('GB');
+		$this->assertTrue($this->vatCalculator->shouldCollectVat('GB'));
+		$this->assertFalse($this->vatCalculator->shouldCollectEuVat('GB'));
+
+		// Valid UK post code
+		$postalCode = 'S1A 2AA';
+		$result = $this->vatCalculator->calculate(24.00, 'GB', $postalCode, false);
+		//Expect standard rate for UK
+		$this->assertEquals(28.80, $result->getPrice());
+		$this->assertEquals(0.20, $result->getTaxRate());
+		$this->assertEquals(4.80, $result->getTaxValue());
+
+		$postalCode = 'BFPO58'; // Dhekelia
+		$result = $this->vatCalculator->calculate(24.00, 'GB', $postalCode, false);
+		$this->assertEquals(28.56, $result->getPrice());
+		$this->assertEquals(0.19, $result->getTaxRate());
+		$this->assertEquals(4.56, $result->getTaxValue());
+	}
+
+
 	public function testSetBusinessCountryCode(): void
 	{
 		$this->vatCalculator->setBusinessCountryCode('DE');
@@ -265,12 +294,6 @@ class VatCalculatorTest extends TestCase
 		$this->assertEquals(0.19, $result->getTaxRate());
 		$this->assertEquals(4.56, $result->getTaxValue());
 
-		$postalCode = 'BFPO58'; // Dhekelia
-		$result = $this->vatCalculator->calculate(24.00, 'GB', $postalCode, false);
-		$this->assertEquals(28.56, $result->getPrice());
-		$this->assertEquals(0.19, $result->getTaxRate());
-		$this->assertEquals(4.56, $result->getTaxValue());
-
 		$postalCode = '9122'; // Madeira
 		$result = $this->vatCalculator->calculate(24.00, 'PT', $postalCode, false);
 		$this->assertEquals(29.28, $result->getPrice());
@@ -288,14 +311,6 @@ class VatCalculatorTest extends TestCase
 		$this->assertEquals(29.04, $result->getPrice());
 		$this->assertEquals(0.21, $result->getTaxRate());
 		$this->assertEquals(5.04, $result->getTaxValue());
-
-		// Valid UK post code
-		$postalCode = 'S1A 2AA';
-		$result = $this->vatCalculator->calculate(24.00, 'GB', $postalCode, false);
-		//Expect standard rate for UK
-		$this->assertEquals(28.80, $result->getPrice());
-		$this->assertEquals(0.20, $result->getTaxRate());
-		$this->assertEquals(4.80, $result->getTaxValue());
 	}
 
 
