@@ -167,6 +167,7 @@ The returned array of rates is unsorted. This method can be useful when you want
 
 EU countries are supported as well as some non-EU countries that use VAT. Some countries are not supported even though they also have VAT. Currently, that's the case for the following countries:
 - Switzerland (CH)
+- United Kingdom (GB)
 - Norway (NO)
 - Turkey (TR)
 

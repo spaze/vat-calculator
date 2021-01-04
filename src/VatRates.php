@@ -95,14 +95,6 @@ class VatRates
 				'Mayotte' => 0,
 			],
 		],
-		'GB' => [ // United Kingdom
-			'rate' => 0.20,
-			'exceptions' => [
-				// UK RAF Bases in Cyprus are taxed at Cyprus rate
-				'Akrotiri' => 0.19,
-				'Dhekelia' => 0.19,
-			],
-		],
 		'GR' => [ // Greece
 			'rate' => 0.24,
 			'exceptions' => [
@@ -198,6 +190,14 @@ class VatRates
 			'rates' => [
 				self::HIGH => 0.077,
 				self::LOW => 0.025,
+			],
+		],
+		'GB' => [ // United Kingdom
+			'rate' => 0.20,
+			'exceptions' => [
+				// UK RAF Bases in Cyprus are taxed at Cyprus rate
+				'Akrotiri' => 0.19,
+				'Dhekelia' => 0.19,
 			],
 		],
 		'NO' => [ // Norway
@@ -311,18 +311,6 @@ class VatRates
 				'name' => 'Mayotte',
 			],
 		],
-		'GB' => [
-			// Akrotiri
-			[
-				'postalCode' => '/^BFPO57|BF12AT$/',
-				'code' => 'CY',
-			],
-			// Dhekelia
-			[
-				'postalCode' => '/^BFPO58|BF12AU$/',
-				'code' => 'CY',
-			],
-		],
 		'GR' => [
 			[
 				'postalCode' => '/^63086$/',
@@ -358,6 +346,29 @@ class VatRates
 		],
 	];
 
+	/**
+	 * Optional postal code exceptions.
+	 *
+	 * Non-EU countries with their own VAT requirements and postal code exceptions,
+	 * added with `addRateForCountry()` for the rate and the exceptions to be applied.
+	 *
+	 * @var array<string, array>
+	 */
+	private $optionalPostalCodeExceptions = [
+		'GB' => [
+			// Akrotiri
+			[
+				'postalCode' => '/^BFPO57|BF12AT$/',
+				'code' => 'CY',
+			],
+			// Dhekelia
+			[
+				'postalCode' => '/^BFPO58|BF12AU$/',
+				'code' => 'CY',
+			],
+		],
+	];
+
 	/** @var DateTimeImmutable */
 	private $now;
 
@@ -379,6 +390,9 @@ class VatRates
 			throw new NoVatRulesForCountryException("No optional tax rules specified for {$country}");
 		}
 		$this->taxRules[$country] = $this->optionalTaxRules[$country];
+		if (isset($this->optionalPostalCodeExceptions[$country])) {
+			$this->postalCodeExceptions[$country] = $this->optionalPostalCodeExceptions[$country];
+		}
 	}
 
 
