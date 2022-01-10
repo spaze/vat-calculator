@@ -9,6 +9,7 @@ use SoapFault;
 use Spaze\VatCalculator\Exceptions\InvalidCharsInVatNumberException;
 use Spaze\VatCalculator\Exceptions\UnsupportedCountryException;
 use Spaze\VatCalculator\Exceptions\VatCheckUnavailableException;
+use stdClass;
 
 class VatCalculator
 {
@@ -177,6 +178,7 @@ class VatCalculator
 				$requesterVatNumber = $this->businessVatNumber;
 			}
 
+			/** @var stdClass $result */
 			$result = $this->soapClient->checkVatApprox([
 				'countryCode' => $countryCode,
 				'vatNumber' => $vatNumber,
