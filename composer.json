@@ -24,7 +24,7 @@
 		"phpstan/phpstan": "^0.12.44",
 		"phpunit/php-timer": "^5.0",
 		"phpunit/phpunit": "^9.4",
-		"spaze/coding-standard": "^0.0.4"
+		"spaze/coding-standard": "^0.0"
 	},
 	"autoload": {
 		"psr-4": {
