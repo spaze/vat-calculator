@@ -21,10 +21,10 @@
 	"require-dev": {
 		"php-parallel-lint/php-parallel-lint": "^1.2",
 		"php-parallel-lint/php-console-highlighter": "^0.5.0",
-		"phpstan/phpstan": "^0.12.44",
+		"phpstan/phpstan": "^1.3",
 		"phpunit/php-timer": "^5.0",
 		"phpunit/phpunit": "^9.4",
-		"spaze/coding-standard": "^0.0.4"
+		"spaze/coding-standard": "^0.0"
 	},
 	"autoload": {
 		"psr-4": {
@@ -32,7 +32,13 @@
 		}
 	},
 	"minimum-stability": "stable",
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
 	"scripts": {
+		"cs-fix": "vendor/bin/phpcbf src/ tests/",
 		"lint": "vendor/bin/parallel-lint --colors src/ tests/",
 		"phpcs": "vendor/bin/phpcs src/ tests/",
 		"phpstan-dev": "vendor/bin/phpstan --ansi analyse --configuration phpstan.neon",

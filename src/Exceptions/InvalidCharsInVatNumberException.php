@@ -8,12 +8,12 @@ use Throwable;
 class InvalidCharsInVatNumberException extends VatNumberException
 {
 
-	/** @var array<integer, string> */
+	/** @var array<int, string> */
 	private $invalidChars = [];
 
 
 	/**
-	 * @param array<integer, array{0: string, 1:integer}> $invalidChars
+	 * @param array<int, array{0: string, 1: int}> $invalidChars
 	 * @param string $vatNumber
 	 * @param Throwable|null $previous
 	 */
@@ -29,7 +29,7 @@ class InvalidCharsInVatNumberException extends VatNumberException
 
 
 	/**
-	 * @return array<integer, string> byte offset => character
+	 * @return array<int, string> byte offset => character
 	 */
 	public function getInvalidChars(): array
 	{

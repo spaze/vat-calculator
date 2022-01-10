@@ -7,6 +7,10 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Spaze\VatCalculator\Exceptions\NoVatRulesForCountryException;
 
+/**
+ * @phpstan-type CountryTaxRules array{rate: float, rates?: array<string, float>, exceptions?: array<string, float>, since?: array<string, array{rate: float, rates?: array<string, float>}>}
+ * @phpstan-type PostalCodeTaxExceptions array<string, array<int, array{postalCode: string, code: string, name?: string, city?: string}>>
+ */
 class VatRates
 {
 
@@ -24,7 +28,7 @@ class VatRates
 	 *
 	 * Taken from: https://ec.europa.eu/taxation_customs/resources/documents/taxation/vat/how_vat_works/rates/vat_rates_en.pdf
 	 *
-	 * @var array<string, array{rate: float, rates?: array, exceptions?: array, since?: array}>
+	 * @var array<string, CountryTaxRules>
 	 */
 	private $taxRules = [
 		'AT' => [ // Austria
@@ -182,7 +186,7 @@ class VatRates
 	 * Non-EU countries with their own VAT requirements, countries in this list
 	 * need to be added manually by `addRateForCountry()` for the rate to be applied.
 	 *
-	 * @var array<string, array{rate: float, rates?: array, exceptions?: array, since?: array}>
+	 * @var array<string, CountryTaxRules>
 	 */
 	private $optionalTaxRules = [
 		'CH' => [ // Switzerland
@@ -211,7 +215,7 @@ class VatRates
 	/**
 	 * All possible postal code exceptions.
 	 *
-	 * @var array<string, array>
+	 * @var PostalCodeTaxExceptions
 	 */
 	private $postalCodeExceptions = [
 		'AT' => [
@@ -352,7 +356,7 @@ class VatRates
 	 * Non-EU countries with their own VAT requirements and postal code exceptions,
 	 * added with `addRateForCountry()` for the rate and the exceptions to be applied.
 	 *
-	 * @var array<string, array>
+	 * @var PostalCodeTaxExceptions
 	 */
 	private $optionalPostalCodeExceptions = [
 		'GB' => [
@@ -449,7 +453,7 @@ class VatRates
 	/**
 	 * @param string $countryCode
 	 * @param DateTimeInterface|null $date
-	 * @return array{rate: float, rates?: array, exceptions?: array, since?: array}
+	 * @return array{rate: float, rates?: array<string, float>}
 	 */
 	private function getRules(string $countryCode, ?DateTimeInterface $date = null): array
 	{
@@ -473,7 +477,7 @@ class VatRates
 	 * Returns current rate, high & low rates, historical & future rates, exceptions, unsorted.
 	 *
 	 * @param string $country
-	 * @return array<integer, float>
+	 * @return array<int, float>
 	 */
 	public function getAllKnownRates(string $country): array
 	{
@@ -492,8 +496,8 @@ class VatRates
 
 
 	/**
-	 * @param array{rate: float, rates?: array, exceptions?: array} $taxRules
-	 * @return array<integer, float>
+	 * @param CountryTaxRules $taxRules
+	 * @return array<int, float>
 	 */
 	private function getRates(array $taxRules): array
 	{
