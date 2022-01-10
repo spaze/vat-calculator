@@ -4,11 +4,11 @@ declare(strict_types = 1);
 namespace Spaze\VatCalculator;
 
 use DateTimeInterface;
+use SoapClient;
+use SoapFault;
 use Spaze\VatCalculator\Exceptions\InvalidCharsInVatNumberException;
 use Spaze\VatCalculator\Exceptions\UnsupportedCountryException;
 use Spaze\VatCalculator\Exceptions\VatCheckUnavailableException;
-use SoapClient;
-use SoapFault;
 
 class VatCalculator
 {

@@ -473,7 +473,7 @@ class VatRates
 	 * Returns current rate, high & low rates, historical & future rates, exceptions, unsorted.
 	 *
 	 * @param string $country
-	 * @return array<integer, float>
+	 * @return array<int, float>
 	 */
 	public function getAllKnownRates(string $country): array
 	{
@@ -493,7 +493,7 @@ class VatRates
 
 	/**
 	 * @param array{rate: float, rates?: array, exceptions?: array} $taxRules
-	 * @return array<integer, float>
+	 * @return array<int, float>
 	 */
 	private function getRates(array $taxRules): array
 	{
