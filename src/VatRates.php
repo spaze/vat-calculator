@@ -324,13 +324,13 @@ class VatRates
 		],
 		'IT' => [
 			[
-				'postalCode' => '/^22060$/',
+				'postalCode' => '/^22061$/',
 				'city' => '/\bcampione\b/i',
 				'code' => 'IT',
 				'name' => "Campione d'Italia",
 			],
 			[
-				'postalCode' => '/^23030$/',
+				'postalCode' => '/^23041$/',
 				'city' => '/\blivigno\b/i',
 				'code' => 'IT',
 				'name' => 'Livigno',
