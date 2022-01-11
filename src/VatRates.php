@@ -8,7 +8,7 @@ use DateTimeInterface;
 use Spaze\VatCalculator\Exceptions\NoVatRulesForCountryException;
 
 /**
- * @phpstan-type CountryTaxRules array{rate: float, rates?: array<string, float>, exceptions?: array<string, float>, since?: array<string, array{rate: float, rates?: array<string, float>}>}
+ * @phpstan-type CountryTaxRules array{rate: float, rates?: array<string, float>, exceptions?: array<string, float|array<string|null, float>>, since?: array<string, array{rate: float, rates?: array<string, float>}>}
  * @phpstan-type PostalCodeTaxExceptions array<string, array<int, array{postalCode: string, code: string, name?: string, city?: string}>>
  */
 class VatRates
@@ -125,7 +125,11 @@ class VatRates
 		'IT' => [ // Italy
 			'rate' => 0.22,
 			'exceptions' => [
-				'Campione d\'Italia' => 0,
+				'Campione d\'Italia' => [
+					self::GENERAL => 0.077,
+					self::HIGH => 0.077,
+					self::LOW => 0.025,
+				],
 				'Livigno' => 0,
 			],
 		],
@@ -428,7 +432,8 @@ class VatRates
 					continue;
 				}
 				if (isset($postalCodeException['name'], $this->taxRules[$postalCodeException['code']]['exceptions'])) {
-					return $this->taxRules[$postalCodeException['code']]['exceptions'][$postalCodeException['name']];
+					$rules = $this->taxRules[$postalCodeException['code']]['exceptions'][$postalCodeException['name']];
+					return is_array($rules) ? $rules[$type] : $rules;
 				}
 				return $this->getRules($postalCodeException['code'], $date)['rate'];
 			}
@@ -503,8 +508,10 @@ class VatRates
 			}
 		}
 		if (isset($taxRules['exceptions'])) {
-			foreach ($taxRules['exceptions'] as $rate) {
-				$rates[] = $rate;
+			foreach ($taxRules['exceptions'] as $exceptions) {
+				foreach ((array)$exceptions as $exception) {
+					$rates[] = $exception;
+				}
 			}
 		}
 		return $rates;
