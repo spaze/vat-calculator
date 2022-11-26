@@ -44,9 +44,9 @@ class VatCalculatorTest extends TestCase
 	public function testCalculateVat(): void
 	{
 		$result = $this->vatCalculator->calculate(24.00, 'DE', null, false);
-		$this->assertEquals(28.56, $result->getPrice());
+		$this->assertEquals(28.56, round($result->getPrice(), 2));
 		$this->assertEquals(0.19, $result->getTaxRate());
-		$this->assertEquals(4.56, $result->getTaxValue());
+		$this->assertEquals(4.56, round($result->getTaxValue(), 2));
 
 		$result = $this->vatCalculator->calculate(24.00, 'DE', null, true);
 		$this->assertEquals(24.00, $result->getPrice());
@@ -59,7 +59,7 @@ class VatCalculatorTest extends TestCase
 		$this->assertEquals(0.00, $result->getTaxValue());
 
 		$result = $this->vatCalculator->calculate(24.00, 'DE', null, false, VatRates::GENERAL, new DateTimeImmutable(self::DATE));
-		$this->assertEquals(28.56, $result->getPrice());
+		$this->assertEquals(28.56, round($result->getPrice(), 2));
 	}
 
 
@@ -252,15 +252,15 @@ class VatCalculatorTest extends TestCase
 		$postalCode = 'S1A 2AA';
 		$result = $this->vatCalculator->calculate(24.00, 'GB', $postalCode, false);
 		//Expect standard rate for UK
-		$this->assertEquals(28.80, $result->getPrice());
+		$this->assertEquals(28.80, round($result->getPrice(), 2));
 		$this->assertEquals(0.20, $result->getTaxRate());
-		$this->assertEquals(4.80, $result->getTaxValue());
+		$this->assertEquals(4.80, round($result->getTaxValue(), 2));
 
 		$postalCode = 'BFPO58'; // Dhekelia
 		$result = $this->vatCalculator->calculate(24.00, 'GB', $postalCode, false);
-		$this->assertEquals(28.56, $result->getPrice());
+		$this->assertEquals(28.56, round($result->getPrice(), 2));
 		$this->assertEquals(0.19, $result->getTaxRate());
-		$this->assertEquals(4.56, $result->getTaxValue());
+		$this->assertEquals(4.56, round($result->getTaxValue(), 2));
 	}
 
 
@@ -268,9 +268,9 @@ class VatCalculatorTest extends TestCase
 	{
 		$this->vatCalculator->setBusinessCountryCode('DE');
 		$result = $this->vatCalculator->calculate(24.00, 'DE', null, true);
-		$this->assertEquals(28.56, $result->getPrice());
+		$this->assertEquals(28.56, round($result->getPrice(), 2));
 		$this->assertEquals(0.19, $result->getTaxRate());
-		$this->assertEquals(4.56, $result->getTaxValue());
+		$this->assertEquals(4.56, round($result->getTaxValue(), 2));
 
 		$this->vatCalculator->setBusinessCountryCode('NL');
 		$result = $this->vatCalculator->calculate(24.00, 'DE', null, true);
@@ -290,15 +290,15 @@ class VatCalculatorTest extends TestCase
 
 		$postalCode = '6691'; // Jungholz
 		$result = $this->vatCalculator->calculate(24.00, 'AT', $postalCode, false);
-		$this->assertEquals(28.56, $result->getPrice());
+		$this->assertEquals(28.56, round($result->getPrice(), 2));
 		$this->assertEquals(0.19, $result->getTaxRate());
-		$this->assertEquals(4.56, $result->getTaxValue());
+		$this->assertEquals(4.56, round($result->getTaxValue(), 2));
 
 		$postalCode = '9122'; // Madeira
 		$result = $this->vatCalculator->calculate(24.00, 'PT', $postalCode, false);
-		$this->assertEquals(29.28, $result->getPrice());
+		$this->assertEquals(29.28, round($result->getPrice(), 2));
 		$this->assertEquals(0.22, $result->getTaxRate());
-		$this->assertEquals(5.28, $result->getTaxValue());
+		$this->assertEquals(5.28, round($result->getTaxValue(), 2));
 	}
 
 
@@ -308,9 +308,9 @@ class VatCalculatorTest extends TestCase
 		$postalCode = 'IGHJ987ERT35';
 		$result = $this->vatCalculator->calculate(24.00, 'ES', $postalCode, false);
 		//Expect standard rate for Spain
-		$this->assertEquals(29.04, $result->getPrice());
+		$this->assertEquals(29.04, round($result->getPrice(), 2));
 		$this->assertEquals(0.21, $result->getTaxRate());
-		$this->assertEquals(5.04, $result->getTaxValue());
+		$this->assertEquals(5.04, round($result->getTaxValue(), 2));
 	}
 
 
@@ -326,9 +326,9 @@ class VatCalculatorTest extends TestCase
 	public function testCalculateNet(): void
 	{
 		$result = $this->vatCalculator->calculateNet(28.56, 'DE', null, false);
-		$this->assertEquals(24.00, $result->getNetPrice());
+		$this->assertEquals(24.00, round($result->getNetPrice(), 2));
 		$this->assertEquals(0.19, $result->getTaxRate());
-		$this->assertEquals(4.56, $result->getTaxValue());
+		$this->assertEquals(4.56, round($result->getTaxValue(), 2));
 
 		$result = $this->vatCalculator->calculateNet(28.56, 'DE', null, true);
 		$this->assertEquals(28.56, $result->getPrice());
@@ -340,14 +340,14 @@ class VatCalculatorTest extends TestCase
 	public function testCalculateHighVatType(): void
 	{
 		$result = $this->vatCalculator->calculate(24.00, 'NL', null, false, VatRates::HIGH);
-		$this->assertEquals(29.04, $result->getPrice());
+		$this->assertEquals(29.04, round($result->getPrice(), 2));
 	}
 
 
 	public function testCalculateLowVatType(): void
 	{
 		$result = $this->vatCalculator->calculate(24.00, 'NL', null, false, VatRates::LOW);
-		$this->assertEquals(26.16, $result->getPrice());
+		$this->assertEquals(26.16, round($result->getPrice(), 2));
 	}
 
 }
