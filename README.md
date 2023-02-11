@@ -4,6 +4,14 @@ VatCalculator
 [![Software License](https://img.shields.io/github/license/spaze/vat-calculator)](LICENSE.md)
 [![PHP Tests](https://github.com/spaze/vat-calculator/workflows/PHP%20Tests/badge.svg)](https://github.com/spaze/vat-calculator/actions?query=workflow%3A%22PHP+Tests%22)
 
+# EOL, use driesvints/vat-calculator
+
+# There won't be any new releases, [version 4.0.4](https://github.com/spaze/vat-calculator/releases/tag/v4.0.4) is the final one of this package
+
+This repository will be archived at the end of 2023. Thank you all!
+
+-----
+
 Handle all the hard stuff related to EU MOSS tax/vat regulations, the way it should be. This is a "modernized" fork of [mpociot/vat-calculator](https://github.com/mpociot/vat-calculator) without Laravel/Cashier support, with some new features, that requires PHP 7.3+.
 
 ```php
