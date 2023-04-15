@@ -119,7 +119,7 @@ class VatCalculatorTest extends TestCase
 			])
 			->willReturn($result);
 
-		$vatNumber = 'SeriouslyInvalidNumber';  // but valid country SE
+		$vatNumber = 'SeriouslyInvalidNumber'; // but valid country SE
 		$this->vatCalculator->setSoapClient($this->vatCheck);
 		$result = $this->vatCalculator->isValidVatNumber($vatNumber);
 		$this->assertFalse($result);
@@ -139,7 +139,7 @@ class VatCalculatorTest extends TestCase
 			])
 			->willThrowException(new SoapFault('Server', 'Something went wrong'));
 
-		$vatNumber = 'SeriouslyInvalidNumber';  // but valid country SE
+		$vatNumber = 'SeriouslyInvalidNumber'; // but valid country SE
 		$this->vatCalculator->setSoapClient($this->vatCheck);
 		$this->vatCalculator->isValidVatNumber($vatNumber);
 	}
@@ -229,7 +229,7 @@ class VatCalculatorTest extends TestCase
 		$this->expectException(UnsupportedCountryException::class);
 		$this->expectExceptionMessage('Unsupported/non-EU country No');
 
-		$vatNumber = 'Norway132';  // unsupported country NO
+		$vatNumber = 'Norway132'; // unsupported country NO
 		$result = $this->vatCalculator->isValidVatNumber($vatNumber);
 		$this->assertFalse($result);
 	}
