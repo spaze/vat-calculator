@@ -4,7 +4,7 @@ VatCalculator
 [![Software License](https://img.shields.io/github/license/spaze/vat-calculator)](LICENSE.md)
 [![PHP Tests](https://github.com/spaze/vat-calculator/workflows/PHP%20Tests/badge.svg)](https://github.com/spaze/vat-calculator/actions?query=workflow%3A%22PHP+Tests%22)
 
-# EOL, use driesvints/vat-calculator
+# EOL, use [driesvints/vat-calculator](https://github.com/driesvints/vat-calculator), or [even Stripe Checkout as we did](https://scotthelme.co.uk/implementing-all-the-stripe-things-for-report-uri/).
 
 # There won't be any new releases, [version 4.0.4](https://github.com/spaze/vat-calculator/releases/tag/v4.0.4) is the final one of this package
 
