@@ -16,8 +16,6 @@ class VatCalculator
 
 	/**
 	 * VAT Service check URL provided by the EU.
-	 *
-	 * @var string
 	 */
 	public const VAT_SERVICE_URL = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 

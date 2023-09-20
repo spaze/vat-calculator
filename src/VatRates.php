@@ -14,13 +14,8 @@ use Spaze\VatCalculator\Exceptions\NoVatRulesForCountryException;
 class VatRates
 {
 
-	/** @var string */
 	public const HIGH = 'high';
-
-	/** @var string */
 	public const LOW = 'low';
-
-	/** @var null */
 	public const GENERAL = null;
 
 	/**
