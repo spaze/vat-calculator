@@ -4,9 +4,9 @@ declare(strict_types = 1);
 namespace JakubJachym\VatCalculator;
 
 use DateTimeImmutable;
+use JakubJachym\VatCalculator\Exceptions\NoVatRulesForCountryException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use JakubJachym\VatCalculator\Exceptions\NoVatRulesForCountryException;
 
 class VatRatesTest extends TestCase
 {

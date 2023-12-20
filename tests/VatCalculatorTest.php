@@ -4,13 +4,13 @@ declare(strict_types = 1);
 namespace JakubJachym\VatCalculator;
 
 use DateTimeImmutable;
+use JakubJachym\VatCalculator\Exceptions\InvalidCharsInVatNumberException;
+use JakubJachym\VatCalculator\Exceptions\UnsupportedCountryException;
+use JakubJachym\VatCalculator\Exceptions\VatCheckUnavailableException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use SoapClient;
 use SoapFault;
-use JakubJachym\VatCalculator\Exceptions\InvalidCharsInVatNumberException;
-use JakubJachym\VatCalculator\Exceptions\UnsupportedCountryException;
-use JakubJachym\VatCalculator\Exceptions\VatCheckUnavailableException;
 use stdClass;
 
 class VatCalculatorTest extends TestCase

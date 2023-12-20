@@ -30,6 +30,7 @@ $vatCalculator->isValidVatNumber('NL123456789B01');
 	- [Countries](#countries)
 - [License](#license)
 - [Contributing](#contributing)
+- [Disclaimer](#disclaimer)
 
 <a name="installation"></a>
 ## Installation
@@ -188,3 +189,9 @@ This library is licensed under the MIT license. Please see [License file](LICENS
 <a name="contributing"></a>
 ## Contributing
 Run PHPUnit tests and static analysis with `composer test`, see `scripts` in `composer.json`. Tests are also run on GitHub with Actions on each push.
+
+<a name="disclaimer"></a>
+## Disclaimer
+While this repository tries to provide up-to-date VAT rates, it is possible that it will fail to do so.
+Please keep in mind that author cannot be held responsible for any damage done to you or anyone for using this
+repository. It is your responsibility to check that used VAT rate is valid.

@@ -4,11 +4,11 @@ declare(strict_types = 1);
 namespace JakubJachym\VatCalculator;
 
 use DateTimeInterface;
-use SoapClient;
-use SoapFault;
 use JakubJachym\VatCalculator\Exceptions\InvalidCharsInVatNumberException;
 use JakubJachym\VatCalculator\Exceptions\UnsupportedCountryException;
 use JakubJachym\VatCalculator\Exceptions\VatCheckUnavailableException;
+use SoapClient;
+use SoapFault;
 use stdClass;
 
 class VatCalculator
