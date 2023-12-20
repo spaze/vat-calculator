@@ -26,7 +26,6 @@ $vatCalculator->isValidVatNumber('NL123456789B01');
 	- [Calculate the gross price](#calculate-the-gross-price)
 	- [Validate EU VAT numbers](#validate-eu-vat-numbers)
 	- [Get EU VAT number details](#vat-number-details)
-	- [Get the IP based country of your user](#get-ip-based-country)
 	- [Get all known rates for a country](#all-known-rates)
 	- [Countries](#countries)
 - [License](#license)
