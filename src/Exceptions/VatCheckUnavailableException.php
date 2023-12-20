@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Spaze\VatCalculator\Exceptions;
+namespace JakubJachym\VatCalculator\Exceptions;
 
 class VatCheckUnavailableException extends VatNumberException
 {

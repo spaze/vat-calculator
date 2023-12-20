@@ -1,3 +1,6 @@
+# Upgrading from <3.6 to 3.7
+* The namespace has been changed for this fork from `Spaze\VatCalculator` to `JakubJachym\VatCalculator` (**BC BREAK**)
+
 # Upgrading from 2.* to 3.*
 
 * Version 3 doesn't support Laravel/Cashier anymore (**BC BREAK**).

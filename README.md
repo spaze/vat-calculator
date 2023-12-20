@@ -1,25 +1,15 @@
 VatCalculator
 ================
 
-[![Software License](https://img.shields.io/github/license/spaze/vat-calculator)](LICENSE.md)
-[![PHP Tests](https://github.com/spaze/vat-calculator/workflows/PHP%20Tests/badge.svg)](https://github.com/spaze/vat-calculator/actions?query=workflow%3A%22PHP+Tests%22)
+[![Software License](https://img.shields.io/github/license/JakubJachym/vat-calculator)](LICENSE.md)
+[![PHP Tests](https://github.com/JakubJachym/vat-calculator/workflows/PHP%20Tests/badge.svg)](https://github.com/JakubJachym/vat-calculator/actions?query=workflow%3A%22PHP+Tests%22)
 
-> [!CAUTION]
-> EOL, use [driesvints/vat-calculator](https://github.com/driesvints/vat-calculator), or [even Stripe Checkout as we did](https://scotthelme.co.uk/implementing-all-the-stripe-things-for-report-uri/).
-
-> [!WARNING]
-> There won't be any new releases, [version 4.0.4](https://github.com/spaze/vat-calculator/releases/tag/v4.0.4) is the final one of this package
-
-> [!IMPORTANT]
-> This repository will be archived at the end of 2023. Thank you all!
-
------
-
-Handle all the hard stuff related to EU MOSS tax/vat regulations, the way it should be. This is a "modernized" fork of [mpociot/vat-calculator](https://github.com/mpociot/vat-calculator) without Laravel/Cashier support, with some new features, that requires PHP 7.3+.
+Handle all the hard stuff related to EU MOSS tax/vat regulations, the way it should be. This is a revived fork of
+[spaze/vat-calculator](https://github.com/spaze/vat-calculator) which was a "modernized" fork of [mpociot/vat-calculator](https://github.com/mpociot/vat-calculator) without Laravel/Cashier support, with some new features, that requires PHP 7.3+.
 
 ```php
 // Easy to use!
-use Spaze\VatCalculator\VatCalculator;
+use JakubJachym\VatCalculator\VatCalculator;
 
 $vatRates = new VatRates();
 $vatCalculator = new VatCalculator($vatRates);
@@ -36,11 +26,11 @@ $vatCalculator->isValidVatNumber('NL123456789B01');
 	- [Calculate the gross price](#calculate-the-gross-price)
 	- [Validate EU VAT numbers](#validate-eu-vat-numbers)
 	- [Get EU VAT number details](#vat-number-details)
-	- [Get the IP based country of your user](#get-ip-based-country)
 	- [Get all known rates for a country](#all-known-rates)
 	- [Countries](#countries)
 - [License](#license)
 - [Contributing](#contributing)
+- [Disclaimer](#disclaimer)
 
 <a name="installation"></a>
 ## Installation
@@ -48,7 +38,7 @@ $vatCalculator->isValidVatNumber('NL123456789B01');
 In order to install the VAT Calculator, just run
 
 ```bash
-$ composer require spaze/vat-calculator
+$ composer require jakubjachym/vat-calculator
 ```
 
 <a name="installation-standalone"></a>
@@ -59,7 +49,7 @@ This package is designed for standalone usage. Simply create a new instance of t
 Example:
 
 ```php
-use Spaze\VatCalculator\VatCalculator;
+use JakubJachym\VatCalculator\VatCalculator;
 
 $vatRates = new VatRates();
 $vatCalculator = new VatCalculator($vatRates);
@@ -199,3 +189,9 @@ This library is licensed under the MIT license. Please see [License file](LICENS
 <a name="contributing"></a>
 ## Contributing
 Run PHPUnit tests and static analysis with `composer test`, see `scripts` in `composer.json`. Tests are also run on GitHub with Actions on each push.
+
+<a name="disclaimer"></a>
+## Disclaimer
+While this repository tries to provide up-to-date VAT rates, it is possible that it will fail to do so.
+Please keep in mind that author cannot be held responsible for any damage done to you or anyone for using this
+repository. It is your responsibility to check that used VAT rate is valid.
