@@ -21,7 +21,7 @@ class VatRates
 	/**
 	 * All available tax rules and their exceptions.
 	 *
-	 * Taken from: https://ec.europa.eu/taxation_customs/resources/documents/taxation/vat/how_vat_works/rates/vat_rates_en.pdf
+	 * Taken from: https://taxation-customs.ec.europa.eu/document/download/28091aa6-62e0-4b27-922c-4f701e2f0ce3_en?filename=vat_rates_en.pdf
 	 *
 	 * @var array<string, CountryTaxRules>
 	 */
@@ -133,6 +133,15 @@ class VatRates
 		],
 		'LU' => [ // Luxembourg
 			'rate' => 0.17,
+			'since' => [
+				'2024-01-01 00:00:00 Europe/Luxembourg' => [
+					'rate' => 0.17,
+				],
+				// https://legilux.public.lu/eli/etat/leg/loi/2022/10/26/a534/jo
+				'2023-01-01 00:00:00 Europe/Luxembourg' => [
+					'rate' => 0.16,
+				],
+			],
 		],
 		'LV' => [ // Latvia
 			'rate' => 0.21,
@@ -153,7 +162,7 @@ class VatRates
 		'PT' => [ // Portugal
 			'rate' => 0.23,
 			'exceptions' => [
-				'Azores' => 0.18,
+				'Azores' => 0.16,
 				'Madeira' => 0.22,
 			],
 		],
@@ -189,10 +198,26 @@ class VatRates
 	 */
 	private $optionalTaxRules = [
 		'CH' => [ // Switzerland
-			'rate' => 0.077,
+			'rate' => 0.081,
 			'rates' => [
-				self::HIGH => 0.077,
-				self::LOW => 0.025,
+				self::HIGH => 0.081,
+				self::LOW => 0.026,
+			],
+			'since' => [
+				'2024-01-01 00:00:00 Europe/Zurich' => [
+					'rate' => 0.081,
+					'rates' => [
+						self::HIGH => 0.081,
+						self::LOW => 0.026,
+					],
+				],
+				'2018-01-01 00:00:00 Europe/Zurich' => [
+					'rate' => 0.077,
+					'rates' => [
+						self::HIGH => 0.077,
+						self::LOW => 0.025,
+					],
+				],
 			],
 		],
 		'GB' => [ // United Kingdom
