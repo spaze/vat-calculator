@@ -1,8 +1,6 @@
 VatCalculator
 ================
 
-[![Software License](https://img.shields.io/github/license/spaze/vat-calculator)](LICENSE.md)
-[![PHP Tests](https://github.com/spaze/vat-calculator/workflows/PHP%20Tests/badge.svg)](https://github.com/spaze/vat-calculator/actions?query=workflow%3A%22PHP+Tests%22)
 
 > [!CAUTION]
 > EOL, use [driesvints/vat-calculator](https://github.com/driesvints/vat-calculator), or [even Stripe Checkout as we did](https://scotthelme.co.uk/implementing-all-the-stripe-things-for-report-uri/).
@@ -15,11 +13,10 @@ VatCalculator
 
 -----
 
-Handle all the hard stuff related to EU MOSS tax/vat regulations, the way it should be. This is a "modernized" fork of [mpociot/vat-calculator](https://github.com/mpociot/vat-calculator) without Laravel/Cashier support, with some new features, that requires PHP 7.3+.
 
 ```php
 // Easy to use!
-use Spaze\VatCalculator\VatCalculator;
+use JakubJachym\VatCalculator\VatCalculator;
 
 $vatRates = new VatRates();
 $vatCalculator = new VatCalculator($vatRates);
@@ -48,7 +45,7 @@ $vatCalculator->isValidVatNumber('NL123456789B01');
 In order to install the VAT Calculator, just run
 
 ```bash
-$ composer require spaze/vat-calculator
+$ composer require jakubjachym/vat-calculator
 ```
 
 <a name="installation-standalone"></a>
@@ -59,7 +56,7 @@ This package is designed for standalone usage. Simply create a new instance of t
 Example:
 
 ```php
-use Spaze\VatCalculator\VatCalculator;
+use JakubJachym\VatCalculator\VatCalculator;
 
 $vatRates = new VatRates();
 $vatCalculator = new VatCalculator($vatRates);

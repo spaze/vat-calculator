@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-namespace Spaze\VatCalculator;
+namespace JakubJachym\VatCalculator;
 
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use Spaze\VatCalculator\Exceptions\NoVatRulesForCountryException;
+use JakubJachym\VatCalculator\Exceptions\NoVatRulesForCountryException;
 
 class VatRatesTest extends TestCase
 {

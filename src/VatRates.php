@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace Spaze\VatCalculator;
+namespace JakubJachym\VatCalculator;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use Spaze\VatCalculator\Exceptions\NoVatRulesForCountryException;
+use JakubJachym\VatCalculator\Exceptions\NoVatRulesForCountryException;
 
 /**
  * @phpstan-type CountryTaxRules array{rate: float, rates?: array<string, float>, exceptions?: array<string, float|array<string|null, float>>, since?: array<string, array{rate: float, rates?: array<string, float>}>}

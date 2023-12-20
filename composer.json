@@ -1,9 +1,13 @@
 {
-	"name": "spaze/vat-calculator",
-	"description": "EU VAT calculation, the way it should be. Standalone & modernized fork of mpociot/vat-calculator, with some new features.",
+	"name": "jakubjachym/vat-calculator",
+	"description": "EU VAT calculation, the way it should be. Revived fork of spaze/vat-calculator which was a standalone & modernized fork of mpociot/vat-calculator, with some new features.",
 	"keywords": ["VAT","Tax","EU MOSS", "VAT ID", "tax calculation", "vat calculation"],
 	"license": "MIT",
 	"authors": [
+		{
+			"name": "Jakub Jáchym",
+			"email": "jakub@jachym.net"
+		},
 		{
 			"name": "Michal Špaček",
 			"homepage": "https://www.michalspacek.com/",
@@ -28,7 +32,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Spaze\\VatCalculator\\": "src/"
+			"JakubJachym\\VatCalculator\\": "src/"
 		}
 	},
 	"minimum-stability": "stable",

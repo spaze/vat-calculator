@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
 
-namespace Spaze\VatCalculator;
+namespace JakubJachym\VatCalculator;
 
 use DateTimeInterface;
 use SoapClient;
 use SoapFault;
-use Spaze\VatCalculator\Exceptions\InvalidCharsInVatNumberException;
-use Spaze\VatCalculator\Exceptions\UnsupportedCountryException;
-use Spaze\VatCalculator\Exceptions\VatCheckUnavailableException;
+use JakubJachym\VatCalculator\Exceptions\InvalidCharsInVatNumberException;
+use JakubJachym\VatCalculator\Exceptions\UnsupportedCountryException;
+use JakubJachym\VatCalculator\Exceptions\VatCheckUnavailableException;
 use stdClass;
 
 class VatCalculator
