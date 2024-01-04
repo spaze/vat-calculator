@@ -44,6 +44,15 @@ class VatRates
 		],
 		'CZ' => [ // Czech Republic
 			'rate' => 0.21,
+			'since' => [
+				'2024-01-01 00:00:00 Europe/Prague' => [
+					'rate' => 0.21,
+					'rates' => [
+						self::HIGH => 0.21,
+						self::LOW => 0.12,
+					],
+				],
+			],
 		],
 		'DE' => [ // Germany
 			'rate' => 0.19,
@@ -65,6 +74,11 @@ class VatRates
 		],
 		'EE' => [ // Estonia
 			'rate' => 0.20,
+			'since' => [
+				'2024-01-01 00:00:00 Europe/Tallinn' => [
+					'rate' => 0.22,
+				],
+			],
 		],
 		'EL' => [ // Hellenic Republic (Greece)
 			'rate' => 0.24,
