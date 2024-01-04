@@ -74,6 +74,11 @@ class VatRates
 		],
 		'EE' => [ // Estonia
 			'rate' => 0.20,
+			'since' => [
+				'2024-01-01 00:00:00 Europe/Tallinn' => [
+					'rate' => 0.22,
+				],
+			],
 		],
 		'EL' => [ // Hellenic Republic (Greece)
 			'rate' => 0.24,
