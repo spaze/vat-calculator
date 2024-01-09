@@ -213,6 +213,12 @@ class VatRates
 		],
 		'IT' => [ // Italy
 			'rate' => 0.22,
+			'rates' => [
+				self::STANDARD_RATE => 0.22,
+				self::REDUCED_RATE => 0.05,
+				self::REDUCED_2ND_RATE => 0.10,
+				self::SUPER_REDUCED_RATE => 0.04,
+			],
 			'exceptions' => [
 				'Campione d\'Italia' => 0,
 				'Livigno' => 0,
