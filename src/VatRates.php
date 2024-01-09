@@ -144,6 +144,11 @@ class VatRates
 		],
 		'FI' => [ // Finland
 			'rate' => 0.24,
+			'rates' => [
+				self::STANDARD_RATE => 0.24,
+				self::REDUCED_RATE => 0.10,
+				self::REDUCED_2ND_RATE => 0.14,
+			],
 		],
 		'FR' => [ // France
 			'rate' => 0.20,
