@@ -130,6 +130,12 @@ class VatRates
 		],
 		'ES' => [ // Spain
 			'rate' => 0.21,
+			'rates' => [
+				self::STANDARD_RATE => 0.21,
+				self::REDUCED_RATE => 0.10,
+				self::REDUCED_2ND_RATE => 0.05,
+				self::SUPER_REDUCED_RATE => 0.04,
+			],
 			'exceptions' => [
 				'Canary Islands' => 0,
 				'Ceuta' => 0,
