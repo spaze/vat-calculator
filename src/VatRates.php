@@ -180,6 +180,11 @@ class VatRates
 		],
 		'HR' => [ // Croatia
 			'rate' => 0.25,
+			'rates' => [
+				self::STANDARD_RATE => 0.25,
+				self::REDUCED_RATE => 0.05,
+				self::REDUCED_2ND_RATE => 0.13,
+			],
 		],
 		'HU' => [ // Hungary
 			'rate' => 0.27,
