@@ -226,6 +226,11 @@ class VatRates
 		],
 		'LT' => [ // Lithuania
 			'rate' => 0.21,
+			'rates' => [
+				self::STANDARD_RATE => 0.21,
+				self::REDUCED_RATE => 0.05,
+				self::REDUCED_2ND_RATE => 0.09,
+			],
 		],
 		'LU' => [ // Luxembourg
 			'rate' => 0.17,
