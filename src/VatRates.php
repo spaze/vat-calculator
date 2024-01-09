@@ -56,6 +56,10 @@ class VatRates
 		],
 		'BG' => [ // Bulgaria
 			'rate' => 0.20,
+			'rates' => [
+				self::STANDARD_RATE => 0.20,
+				self::REDUCED_RATE => 0.09,
+			],
 		],
 		'CY' => [ // Cyprus
 			'rate' => 0.19,
