@@ -226,16 +226,13 @@ class VatRates
 	private $optionalTaxRules = [
 		'CH' => [ // Switzerland
 			'rate' => 0.081,
-			'rates' => [
-				self::STANDARD_RATE => 0.081,
-				self::REDUCED_RATE => 0.026,
-			],
 			'since' => [
 				'2024-01-01 00:00:00 Europe/Zurich' => [
 					'rate' => 0.081,
 					'rates' => [
 						self::STANDARD_RATE => 0.081,
 						self::REDUCED_RATE => 0.026,
+						self::SUPER_REDUCED_RATE => 0.038,
 					],
 				],
 				'2018-01-01 00:00:00 Europe/Zurich' => [
@@ -243,6 +240,7 @@ class VatRates
 					'rates' => [
 						self::STANDARD_RATE => 0.077,
 						self::REDUCED_RATE => 0.025,
+						self::SUPER_REDUCED_RATE => 0.037,
 					],
 				],
 			],
