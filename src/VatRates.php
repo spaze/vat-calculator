@@ -16,6 +16,7 @@ class VatRates
 	public const GENERAL = null;
 	public const STANDARD_RATE = "standard";
 	public const REDUCED_RATE = "reduced";
+	public const REDUCED_2ND_RATE = "reduced-second";
 	public const SUPER_REDUCED_RATE = "super-reduced";
 	public const PARKING_RATE = "parking";
 
@@ -33,6 +34,13 @@ class VatRates
 	private $taxRules = [
 		'AT' => [ // Austria
 			'rate' => 0.20,
+			'rates' => [
+				self::STANDARD_RATE => 0.20,
+				self::REDUCED_RATE => 0.10,
+				self::REDUCED_2ND_RATE => 0.13,
+				self::SUPER_REDUCED_RATE => 0.05,
+				self::PARKING_RATE => 0.13,
+			],
 			'exceptions' => [
 				'Jungholz' => 0.19,
 				'Mittelberg' => 0.19,
