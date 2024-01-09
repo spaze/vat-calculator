@@ -119,6 +119,11 @@ class VatRates
 		],
 		'EL' => [ // Hellenic Republic (Greece)
 			'rate' => 0.24,
+			'rates' => [
+				self::STANDARD_RATE => 0.24,
+				self::REDUCED_RATE => 0.13,
+				self::REDUCED_2ND_RATE => 0.06,
+			],
 			'exceptions' => [
 				'Mount Athos' => 0,
 			],
