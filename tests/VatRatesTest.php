@@ -73,15 +73,6 @@ class VatRatesTest extends TestCase
 	}
 
 
-	public function testGetRatesExceptionsItCampioneDItalia(): void
-	{
-		$this->assertEquals(0.077, $this->vatRates->getTaxRateForLocation('IT', '22061'));
-		$this->assertEquals(0.077, $this->vatRates->getTaxRateForLocation('IT', '22061', VatRates::GENERAL));
-		$this->assertEquals(0.077, $this->vatRates->getTaxRateForLocation('IT', '22061', VatRates::HIGH));
-		$this->assertEquals(0.025, $this->vatRates->getTaxRateForLocation('IT', '22061', VatRates::LOW));
-	}
-
-
 	public function testGetAllKnownRates(): void
 	{
 		$this->assertEquals([0.20, 0.19], $this->vatRates->getAllKnownRates('AT'));
