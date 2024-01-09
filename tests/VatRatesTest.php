@@ -73,6 +73,16 @@ class VatRatesTest extends TestCase
 	}
 
 
+	public function testGetRatesForLuxembourg(): void
+	{
+		$this->assertEquals(0.17, $this->vatRates->getTaxRateForLocation('LU', null));
+		$this->assertEquals(0.17, $this->vatRates->getTaxRateForLocation('LU', null, VatRates::STANDARD_RATE));
+		$this->assertEquals(0.08, $this->vatRates->getTaxRateForLocation('LU', null, VatRates::REDUCED_RATE));
+		$this->assertEquals(0.03, $this->vatRates->getTaxRateForLocation('LU', null, VatRates::SUPER_REDUCED_RATE));
+		$this->assertEquals(0.14, $this->vatRates->getTaxRateForLocation('LU', null, VatRates::PARKING_RATE));
+	}
+
+
 	public function testGetAllKnownRates(): void
 	{
 		$this->assertEquals([0.20, 0.19], $this->vatRates->getAllKnownRates('AT'));

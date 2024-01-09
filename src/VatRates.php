@@ -151,10 +151,22 @@ class VatRates
 			'since' => [
 				'2024-01-01 00:00:00 Europe/Luxembourg' => [
 					'rate' => 0.17,
+					'rates' => [
+						self::STANDARD_RATE => 0.17,
+						self::REDUCED_RATE => 0.08,
+						self::SUPER_REDUCED_RATE => 0.03,
+						self::PARKING_RATE => 0.14,
+					],
 				],
 				// https://legilux.public.lu/eli/etat/leg/loi/2022/10/26/a534/jo
 				'2023-01-01 00:00:00 Europe/Luxembourg' => [
 					'rate' => 0.16,
+					'rates' => [
+						self::STANDARD_RATE => 0.16,
+						self::REDUCED_RATE => 0.07,
+						self::SUPER_REDUCED_RATE => 0.03,
+						self::PARKING_RATE => 0.13,
+					],
 				],
 			],
 		],
