@@ -199,6 +199,12 @@ class VatRates
 			'since' => [
 				'2021-03-01 00:00:00 Europe/Dublin' => [
 					'rate' => 0.23,
+					'rates' => [
+						self::STANDARD_RATE => 0.23,
+						self::REDUCED_RATE => 0.135,
+						self::REDUCED_2ND_RATE => 0.09,
+						self::SUPER_REDUCED_RATE => 0.048,
+					],
 				],
 				'2020-09-01 00:00:00 Europe/Dublin' => [
 					'rate' => 0.21,
