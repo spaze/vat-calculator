@@ -13,10 +13,15 @@ use JakubJachym\VatCalculator\Exceptions\NoVatRulesForCountryException;
  */
 class VatRates
 {
-
-	public const HIGH = 'high';
-	public const LOW = 'low';
 	public const GENERAL = null;
+	public const STANDARD_RATE = "standard";
+	public const REDUCED_RATE = "reduced";
+	public const SUPER_REDUCED_RATE = "super-reduced";
+	public const PARKING_RATE = "parking";
+
+	// Kept for backwards compatibility
+	public const HIGH = self::STANDARD_RATE;
+	public const LOW = self::REDUCED_RATE;
 
 	/**
 	 * All available tax rules and their exceptions.
@@ -48,8 +53,8 @@ class VatRates
 				'2024-01-01 00:00:00 Europe/Prague' => [
 					'rate' => 0.21,
 					'rates' => [
-						self::HIGH => 0.21,
-						self::LOW => 0.12,
+						self::STANDARD_RATE => 0.21,
+						self::REDUCED_RATE => 0.12,
 					],
 				],
 			],
@@ -162,8 +167,8 @@ class VatRates
 		'NL' => [ // Netherlands
 			'rate' => 0.21,
 			'rates' => [
-				self::HIGH => 0.21,
-				self::LOW => 0.09,
+				self::STANDARD_RATE => 0.21,
+				self::REDUCED_RATE => 0.09,
 			],
 		],
 		'PL' => [ // Poland
@@ -210,22 +215,22 @@ class VatRates
 		'CH' => [ // Switzerland
 			'rate' => 0.081,
 			'rates' => [
-				self::HIGH => 0.081,
-				self::LOW => 0.026,
+				self::STANDARD_RATE => 0.081,
+				self::REDUCED_RATE => 0.026,
 			],
 			'since' => [
 				'2024-01-01 00:00:00 Europe/Zurich' => [
 					'rate' => 0.081,
 					'rates' => [
-						self::HIGH => 0.081,
-						self::LOW => 0.026,
+						self::STANDARD_RATE => 0.081,
+						self::REDUCED_RATE => 0.026,
 					],
 				],
 				'2018-01-01 00:00:00 Europe/Zurich' => [
 					'rate' => 0.077,
 					'rates' => [
-						self::HIGH => 0.077,
-						self::LOW => 0.025,
+						self::STANDARD_RATE => 0.077,
+						self::REDUCED_RATE => 0.025,
 					],
 				],
 			],
