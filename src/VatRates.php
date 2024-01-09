@@ -152,6 +152,12 @@ class VatRates
 		],
 		'FR' => [ // France
 			'rate' => 0.20,
+			'rates' => [
+				self::STANDARD_RATE => 0.20,
+				self::REDUCED_RATE => 0.055,
+				self::REDUCED_2ND_RATE => 0.10,
+				self::SUPER_REDUCED_RATE => 0.021,
+			],
 			'exceptions' => [
 				// Overseas France
 				'Reunion' => 0.085,
