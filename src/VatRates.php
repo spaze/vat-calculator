@@ -86,6 +86,10 @@ class VatRates
 			'since' => [
 				'2021-01-01 00:00:00 Europe/Berlin' => [
 					'rate' => 0.19,
+					'rates' => [
+						self::STANDARD_RATE => 0.19,
+						self::REDUCED_RATE => 0.07,
+					],
 				],
 				'2020-07-01 00:00:00 Europe/Berlin' => [
 					'rate' => 0.16,

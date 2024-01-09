@@ -87,7 +87,7 @@ class VatRatesTest extends TestCase
 	{
 		$this->assertEquals([0.20, 0.10, 0.13, 0.05, 0.19], $this->vatRates->getAllKnownRates('AT'));
 		$this->assertEquals([0.21, 0.12], $this->vatRates->getAllKnownRates('CZ'));
-		$this->assertEquals([0.19, 0, 0.16], $this->vatRates->getAllKnownRates('DE'));
+		$this->assertEquals([0.19, 0, 0.07, 0.16], $this->vatRates->getAllKnownRates('DE'));
 		$this->assertEquals([0.21, 0.09], $this->vatRates->getAllKnownRates('NL'));
 	}
 
