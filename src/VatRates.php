@@ -48,6 +48,11 @@ class VatRates
 		],
 		'BE' => [ // Belgium
 			'rate' => 0.21,
+			'rates' => [
+				self::STANDARD_RATE => 0.21,
+				self::REDUCED_RATE => 0.06,
+				self::PARKING_RATE => 0.12,
+			],
 		],
 		'BG' => [ // Bulgaria
 			'rate' => 0.20,
