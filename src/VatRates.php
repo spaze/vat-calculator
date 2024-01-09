@@ -108,6 +108,12 @@ class VatRates
 			'since' => [
 				'2024-01-01 00:00:00 Europe/Tallinn' => [
 					'rate' => 0.22,
+					'rates' => [
+						self::STANDARD_RATE => 0.22,
+						self::REDUCED_RATE => 0.09,
+						self::REDUCED_2ND_RATE => 0.05,
+					],
+
 				],
 			],
 		],
