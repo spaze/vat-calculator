@@ -63,6 +63,11 @@ class VatRates
 		],
 		'CY' => [ // Cyprus
 			'rate' => 0.19,
+			'rates' => [
+				self::STANDARD_RATE => 0.19,
+				self::REDUCED_RATE => 0.05,
+				self::REDUCED_2ND_RATE => 0.09,
+			],
 		],
 		'CZ' => [ // Czech Republic
 			'rate' => 0.21,
