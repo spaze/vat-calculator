@@ -7,7 +7,6 @@ VatCalculator
 > [!CAUTION]
 > EOL, use:
 > - [driesvints/vat-calculator](https://github.com/driesvints/vat-calculator) for the original package
-> - [jakubjachym/vat-calculator](https://github.com/JakubJachym/vat-calculator) or if you want date-based VAT rates and other features this package has/had and driesvints/vat-calculator doesn't
 > - or [even Stripe Checkout as we did](https://scotthelme.co.uk/implementing-all-the-stripe-things-for-report-uri/)
 
 > [!WARNING]
