@@ -37,7 +37,7 @@ class VatCalculator
 
 	public function __construct(VatRates $vatRates, ?string $businessCountryCode = null, ?string $businessVatNumber = null, ?float $timeout = null)
 	{
-		trigger_error('Hi, please stop using spaze/vat-calculator, it is not supported anymore, the VAT rates are incorrect. Use https://github.com/driesvints/vat-calculator (the original) or Stripe Checkout and for more info see https://github.com/spaze/vat-calculator/releases/tag/v3.6.666', E_USER_WARNING);
+		trigger_error('Hi, please stop using spaze/vat-calculator, it is not supported anymore, the VAT rates are incorrect. Use https://github.com/driesvints/vat-calculator (the original) or Stripe Checkout and for more info see https://github.com/spaze/vat-calculator/releases/tag/v3.6.666', E_USER_ERROR);
 		$this->vatRates = $vatRates;
 		if ($businessCountryCode) {
 			$this->setBusinessCountryCode($businessCountryCode);
