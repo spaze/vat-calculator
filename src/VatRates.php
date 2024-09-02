@@ -149,6 +149,16 @@ class VatRates
 				self::REDUCED_RATE => 0.10,
 				self::REDUCED_2ND_RATE => 0.14,
 			],
+			'since' => [
+				'2024-09-01 00:00:00 Europe/Helsinki' => [
+					'rate' => 0.255,
+					'rates' => [
+						self::STANDARD_RATE => 0.255,
+						self::REDUCED_RATE => 0.10,
+						self::REDUCED_2ND_RATE => 0.14,
+					],
+				],
+			],
 		],
 		'FR' => [ // France
 			'rate' => 0.20,
